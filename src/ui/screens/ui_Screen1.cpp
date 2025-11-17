@@ -5,7 +5,7 @@
 
 #include "ui/ui.h"
 #include "Globals.h"
-#include "events/events.h"
+#include "ui/events/events.h"
 
 lv_obj_t *uic_ConfirmLabel1;
 lv_obj_t *uic_UserDisplayLabel;
@@ -43,7 +43,7 @@ void ui_event_ConfirmUserButton(lv_event_t *e)
 
 // build funtions
 
-void ui_Screen1_screen_init(void)
+void ui_UserSelection_screen_init(void)
 {
     ui_Screen1 = lv_obj_create(NULL);
     lv_obj_remove_flag(ui_Screen1, LV_OBJ_FLAG_SCROLLABLE); /// Flags
@@ -132,7 +132,7 @@ void ui_Screen1_screen_init(void)
     uic_ConfirmLabel1 = ui_ConfirmLabel1;
 }
 
-void ui_Screen1_screen_destroy(void)
+void ui_UserSelection_screen_destroy(void)
 {
     if (ui_Screen1)
         lv_obj_del(ui_Screen1);

@@ -7,31 +7,31 @@
 #define UI_SCREEN1_H
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-// SCREEN: ui_Screen1
-extern void ui_Screen1_screen_init(void);
-extern void ui_Screen1_screen_destroy(void);
-extern lv_obj_t *ui_Screen1;
-extern void ui_event_user_dropdown( lv_event_t * e);
-extern lv_obj_t *ui_Dropdown1;
-extern lv_obj_t *ui_BSLogo;
-extern lv_obj_t *ui_SelectUserLabel;
-extern void ui_event_ConfirmUserButton( lv_event_t * e);
-extern lv_obj_t *ui_ConfirmUserButton;
-extern lv_obj_t *ui_UserDisplayLabel;
-extern lv_obj_t *ui_ConfirmLabel1;
-// CUSTOM VARIABLES
-extern lv_obj_t *uic_BSLogo;
-extern lv_obj_t *uic_SelectUserLabel;
-extern lv_obj_t *uic_ConfirmUserButton;
-extern lv_obj_t *uic_UserDisplayLabel;
-extern lv_obj_t *uic_ConfirmLabel1;
+    // SCREEN: ui_Screen1
+    extern void ui_UserSelection_screen_init(void);
+    extern void ui_UserSelection_screen_destroy(void);
+    extern lv_obj_t *ui_Screen1;
+    extern void ui_event_user_dropdown(lv_event_t *e);
+    extern lv_obj_t *ui_Dropdown1;
+    extern lv_obj_t *ui_BSLogo;
+    extern lv_obj_t *ui_SelectUserLabel;
+    extern void ui_event_ConfirmUserButton(lv_event_t *e);
+    extern lv_obj_t *ui_ConfirmUserButton;
+    extern lv_obj_t *ui_UserDisplayLabel;
+    extern lv_obj_t *ui_ConfirmLabel1;
+    // CUSTOM VARIABLES
+    extern lv_obj_t *uic_BSLogo;
+    extern lv_obj_t *uic_SelectUserLabel;
+    extern lv_obj_t *uic_ConfirmUserButton;
+    extern lv_obj_t *uic_UserDisplayLabel;
+    extern lv_obj_t *uic_ConfirmLabel1;
 
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif
 
 #endif
-
