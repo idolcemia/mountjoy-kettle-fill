@@ -23,6 +23,7 @@
 #include <WiFi/WiFiClientWrapper.h>
 #include <HttpResponse.h>
 #include <Users.h>
+#include <Diagnostic.h>
 
 #include "config.h"
 #include "Globals.h"
@@ -68,9 +69,16 @@ void setup()
 
 void loop()
 {
+    // Diagnostic::updateDefault();
     lv_timer_handler();
-    // _log();
-    delay(5);
+
+    // Only update once LVGL is stable
+    if (millis() > 3000)  // wait 3s after boot
+    {
+        Diagnostic::updateDefault();
+    }
+
+    delay(16);
 }
 
 void _log()
