@@ -26,7 +26,6 @@
 #include <Diagnostic.h>
 
 #include "config.h"
-#include "Globals.h"
 
 const char *ssid = WIFI_SSID;
 const char *password = WIFI_PASS;

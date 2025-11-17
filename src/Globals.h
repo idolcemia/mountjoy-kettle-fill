@@ -3,8 +3,10 @@
 
 #include <RumpshiftLogger.h>
 #include <Users.h>
+#include <NetworkManager.h>
 
 extern RumpshiftLogger logger;
 extern Users *users;
+extern NetworkManager *network;
 
 #endif

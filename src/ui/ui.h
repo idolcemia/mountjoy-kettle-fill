@@ -26,6 +26,7 @@ extern "C" {
 
 ///////////////////// SCREENS ////////////////////
 #include "screens/ui_UserSelectionScreen.h"
+#include "screens/ui_WiFiConnect.h"
 #include "ui_Screen2.h"
 
 ///////////////////// VARIABLES ////////////////////
