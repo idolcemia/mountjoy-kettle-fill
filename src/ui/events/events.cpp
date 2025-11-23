@@ -3,6 +3,7 @@
 #include "ui/ui.h"
 #include "Globals.h"
 #include "ui/screens/ui_DebugLogScreen.h"
+#include "ui/screens/ui_MenuSelectionScreen.h"
 
 void handleMenuSelectionDropdownEvent(lv_event_t *e)
 {
@@ -11,7 +12,16 @@ void handleMenuSelectionDropdownEvent(lv_event_t *e)
 
 void handleMenuSelectionButtonEvent(lv_event_t *e)
 {
-    logger.info("button pressed");
+    logger->info("Menu selection button pressed");
+    lv_obj_t *dropdown = ui_MenuDropdown;
+    if (!dropdown) return;
+
+    uint16_t selected_index = lv_dropdown_get_selected(dropdown);
+    // if (selected_index < menus->menus.getMenuCount())
+    // {
+    //     ui_MenuSelection_screen_destroy();
+    //     menus->menus.loadMenu(selected_index); // load the selected menu
+    // }
     // uint16_t selected = getDropdownSelection(e);
 }
 
@@ -21,20 +31,20 @@ void handleUserDropdownEvent(lv_event_t *e)
     lv_obj_t *dd = (lv_obj_t *)lv_event_get_target(e);
     uint16_t selected = lv_dropdown_get_selected(dd);
 
-    logger.info("Dropdown1 selected index: ");
-    logger.info(selected);
+    logger->info("Dropdown1 selected index: ");
+    logger->info(selected);
 
     if (users && selected < users->getUserCount())
     {
         const char *name = users->getUsers()[selected].getName().c_str();
         lv_label_set_text(ui_UserDisplayLabel, name);
 
-        logger.info("Dropdown1 selected name: ");
-        logger.info(String(name));
+        logger->info("Dropdown1 selected name: ");
+        logger->info(String(name));
     }
     else
     {
-        logger.info("Unknown name");
+        logger->info("Unknown name");
         lv_label_set_text(ui_UserDisplayLabel, "Unknown");
     }
 
@@ -48,7 +58,7 @@ void handleConnectWiFiButton(lv_event_t *e)
     // Load the debug screen before connecting
     ui_DebugLog_screen_init();
 
-    logger.info("Starting WiFi connection...");
+    logger->info("Starting WiFi connection...");
 
     if (!ui_WiFiDropdown)
         return;
@@ -74,7 +84,7 @@ void handleConnectWiFiButton(lv_event_t *e)
     lv_timer_handler(); // also ok
     delay(20);          // tiny delay to allow flush
 
-    logger.info(String("[WiFiScreen] Connecting to: ") + ssid);
+    logger->info(String("[WiFiScreen] Connecting to: ") + ssid);
 
     // --- BLOCKING CONNECT ---
     network->begin();
@@ -111,8 +121,8 @@ uint16_t getDropdownSelection(lv_event_t *e)
     lv_obj_t *dd = (lv_obj_t *)lv_event_get_target(e);
     uint16_t selected = lv_dropdown_get_selected(dd);
 
-    logger.info("Dropdown1 selected index: ");
-    logger.info(selected);
+    logger->info("Dropdown1 selected index: ");
+    logger->info(selected);
 
     return selected;
 }

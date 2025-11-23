@@ -60,7 +60,8 @@ lv_obj_set_align( ui_SelectMode, LV_ALIGN_CENTER );
 lv_label_set_text(ui_SelectMode,"Select Mode");
 lv_obj_set_style_text_color(ui_SelectMode, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_SelectMode, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_text_font(ui_SelectMode, &lv_font_montserrat_48, LV_PART_MAIN| LV_STATE_DEFAULT);
+// lv_obj_set_style_text_font(ui_SelectMode, &lv_font_montserrat_48, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_SelectMode, &lv_font_montserrat_14, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_radius(ui_SelectMode, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_bg_color(ui_SelectMode, lv_color_hex(0x956207), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_SelectMode, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
@@ -89,7 +90,8 @@ lv_obj_set_align( ui_UserDisplayLabel1, LV_ALIGN_CENTER );
 lv_label_set_text(ui_UserDisplayLabel1,"Make a selection");
 lv_obj_set_style_text_color(ui_UserDisplayLabel1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_UserDisplayLabel1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_text_font(ui_UserDisplayLabel1, &lv_font_montserrat_40, LV_PART_MAIN| LV_STATE_DEFAULT);
+// lv_obj_set_style_text_font(ui_UserDisplayLabel1, &lv_font_montserrat_40, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_UserDisplayLabel1, &lv_font_montserrat_14, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_ConfirmLabel2 = lv_label_create(ui_Screen2);
 lv_obj_set_width( ui_ConfirmLabel2, LV_SIZE_CONTENT);  /// 1
@@ -98,7 +100,8 @@ lv_obj_set_x( ui_ConfirmLabel2, 196 );
 lv_obj_set_y( ui_ConfirmLabel2, 134 );
 lv_obj_set_align( ui_ConfirmLabel2, LV_ALIGN_CENTER );
 lv_label_set_text(ui_ConfirmLabel2,"confirm");
-lv_obj_set_style_text_font(ui_ConfirmLabel2, &lv_font_montserrat_40, LV_PART_MAIN| LV_STATE_DEFAULT);
+// lv_obj_set_style_text_font(ui_ConfirmLabel2, &lv_font_montserrat_40, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_ConfirmLabel2, &lv_font_montserrat_14, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 lv_obj_add_event_cb(ui_Dropdown2, ui_event_Dropdown2, LV_EVENT_ALL, NULL);
 uic_BSLogo2 = ui_BSLogo2;

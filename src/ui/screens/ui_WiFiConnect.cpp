@@ -68,7 +68,8 @@ void ui_WiFiConnect_screen_init(void)
     ui_SelectSSIDLabel = lv_label_create(ui_WiFiConnectScreen);
     lv_label_set_text(ui_SelectSSIDLabel, "Select WiFi Network");
     lv_obj_set_style_text_color(ui_SelectSSIDLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
-    lv_obj_set_style_text_font(ui_SelectSSIDLabel, &lv_font_montserrat_48, LV_PART_MAIN);
+    // lv_obj_set_style_text_font(ui_SelectSSIDLabel, &lv_font_montserrat_48, LV_PART_MAIN);
+    lv_obj_set_style_text_font(ui_SelectSSIDLabel, &lv_font_montserrat_14, LV_PART_MAIN);
     lv_obj_set_style_bg_color(ui_SelectSSIDLabel, lv_color_hex(0x956207), LV_PART_MAIN);
     lv_obj_set_style_bg_opa(ui_SelectSSIDLabel, 255, LV_PART_MAIN);
     lv_obj_set_style_bg_grad_color(ui_SelectSSIDLabel, lv_color_hex(0x000000), LV_PART_MAIN);
@@ -103,14 +104,16 @@ void ui_WiFiConnect_screen_init(void)
 
     lv_obj_t *ui_ConnectLabel = lv_label_create(ui_ConnectWiFiButton);
     lv_label_set_text(ui_ConnectLabel, "Connect");
-    lv_obj_set_style_text_font(ui_ConnectLabel, &lv_font_montserrat_40, LV_PART_MAIN);
+    // lv_obj_set_style_text_font(ui_ConnectLabel, &lv_font_montserrat_40, LV_PART_MAIN);
+    lv_obj_set_style_text_font(ui_ConnectLabel, &lv_font_montserrat_14, LV_PART_MAIN);
     lv_obj_align(ui_ConnectLabel, LV_ALIGN_CENTER, 0, 0);
 
     // Status Label (centered above button)
     ui_WiFiStatusLabel = lv_label_create(ui_WiFiConnectScreen);
     lv_label_set_text(ui_WiFiStatusLabel, "Status: Idle");
     lv_obj_set_style_text_color(ui_WiFiStatusLabel, lv_color_hex(0x000000), LV_PART_MAIN);
-    lv_obj_set_style_text_font(ui_WiFiStatusLabel, &lv_font_montserrat_40, LV_PART_MAIN);
+    // lv_obj_set_style_text_font(ui_WiFiStatusLabel, &lv_font_montserrat_40, LV_PART_MAIN);
+    lv_obj_set_style_text_font(ui_WiFiStatusLabel, &lv_font_montserrat_14, LV_PART_MAIN);
 
     lv_obj_align_to(ui_WiFiStatusLabel,
                     ui_ConnectWiFiButton,

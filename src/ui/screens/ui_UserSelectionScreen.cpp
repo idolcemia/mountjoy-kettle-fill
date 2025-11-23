@@ -84,7 +84,8 @@ void ui_UserSelection_screen_init(void)
     lv_label_set_text(ui_SelectUserLabel, "Select User Menu");
     lv_obj_set_style_text_color(ui_SelectUserLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_SelectUserLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_SelectUserLabel, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_text_font(ui_SelectUserLabel, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_SelectUserLabel, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_radius(ui_SelectUserLabel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_SelectUserLabel, lv_color_hex(0x956207), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_SelectUserLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -113,7 +114,8 @@ void ui_UserSelection_screen_init(void)
     lv_label_set_text(ui_UserDisplayLabel, "Make a selection");
     lv_obj_set_style_text_color(ui_UserDisplayLabel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_UserDisplayLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_UserDisplayLabel, &lv_font_montserrat_40, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_text_font(ui_UserDisplayLabel, &lv_font_montserrat_40, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_UserDisplayLabel, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_ConfirmLabel1 = lv_label_create(ui_UserSelectionScreen);
     lv_obj_set_width(ui_ConfirmLabel1, LV_SIZE_CONTENT);  /// 1
@@ -122,7 +124,8 @@ void ui_UserSelection_screen_init(void)
     lv_obj_set_y(ui_ConfirmLabel1, 135);
     lv_obj_set_align(ui_ConfirmLabel1, LV_ALIGN_CENTER);
     lv_label_set_text(ui_ConfirmLabel1, "Confirm");
-    lv_obj_set_style_text_font(ui_ConfirmLabel1, &lv_font_montserrat_40, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_text_font(ui_ConfirmLabel1, &lv_font_montserrat_40, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_ConfirmLabel1, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_add_event_cb(ui_Dropdown1, ui_event_user_dropdown, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_ConfirmUserButton, ui_event_ConfirmUserButton, LV_EVENT_ALL, NULL);

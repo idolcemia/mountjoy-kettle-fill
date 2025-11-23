@@ -74,10 +74,10 @@ void ui_DebugLog_screen_init()
     lv_scr_load(ui_DebugLogScreen);
 
     // Seed logs with existing buffered text
-    lv_label_set_text(ui_LogLabel, logger.getLogText().c_str());
+    lv_label_set_text(ui_LogLabel, logger->getLogText().c_str());
 
     // Logger callback for real-time updates
-    logger.setCallback(
+    logger->setCallback(
         [](const String &line)
         {
             if (!ui_LogLabel)

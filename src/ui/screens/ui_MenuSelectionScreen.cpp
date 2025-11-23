@@ -7,7 +7,6 @@ lv_obj_t *ui_MenuSelectionScreen = nullptr;
 lv_obj_t *ui_MenuDropdown = nullptr;
 lv_obj_t *ui_ConfirmMenuButton = nullptr;
 lv_obj_t *ui_MenuDisplayLabel = nullptr;
-lv_obj_t *ui_NetworkStatusLabel = nullptr;
 lv_obj_t *ui_MenuLogo = nullptr;
 
 // Event: dropdown changed
@@ -38,22 +37,22 @@ void ui_event_confirm_menu_button(lv_event_t *e)
 }
 
 // Update network status label
-void ui_update_network_status()
-{
-    if (!ui_NetworkStatusLabel)
-        return;
+// void ui_update_network_status()
+// {
+//     if (!gLabels.networkStatusLabel)
+//         return;
 
-    if (network && network->isConnected())
-    {
-        lv_label_set_text(ui_NetworkStatusLabel, "Network: Connected");
-        lv_obj_set_style_text_color(ui_NetworkStatusLabel, lv_color_hex(0x00FF00), LV_PART_MAIN | LV_STATE_DEFAULT);
-    }
-    else
-    {
-        lv_label_set_text(ui_NetworkStatusLabel, "Network: Disconnected");
-        lv_obj_set_style_text_color(ui_NetworkStatusLabel, lv_color_hex(0xFF0000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    }
-}
+//     if (network && network->isConnected())
+//     {
+//         lv_label_set_text(gLabels.networkStatusLabel, "Network: Connected");
+//         lv_obj_set_style_text_color(gLabels.networkStatusLabel, lv_color_hex(0x00FF00), LV_PART_MAIN | LV_STATE_DEFAULT);
+//     }
+//     else
+//     {
+//         lv_label_set_text(gLabels.networkStatusLabel, "Network: Disconnected");
+//         lv_obj_set_style_text_color(gLabels.networkStatusLabel, lv_color_hex(0xFF0000), LV_PART_MAIN | LV_STATE_DEFAULT);
+//     }
+// }
 
 // Initialize the screen
 void ui_MenuSelection_screen_init()
@@ -68,7 +67,7 @@ void ui_MenuSelection_screen_init()
 
     // --- Dropdown ---
     ui_MenuDropdown = lv_dropdown_create(ui_MenuSelectionScreen);
-    lv_dropdown_set_options(ui_MenuDropdown, Menus::getInstance().menus.getMenusDelimit("\n").c_str());
+    // lv_dropdown_set_options(ui_MenuDropdown, menus->menus.getMenusDelimit("\n").c_str());
     lv_obj_set_size(ui_MenuDropdown, 314, 50);
     lv_obj_align(ui_MenuDropdown, LV_ALIGN_CENTER, 0, 50);
     lv_obj_add_flag(ui_MenuDropdown, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
@@ -78,7 +77,8 @@ void ui_MenuSelection_screen_init()
     ui_MenuDisplayLabel = lv_label_create(ui_MenuSelectionScreen);
     lv_label_set_text(ui_MenuDisplayLabel, "Make a selection");
     lv_obj_set_style_text_color(ui_MenuDisplayLabel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_MenuDisplayLabel, &lv_font_montserrat_40, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_text_font(ui_MenuDisplayLabel, &lv_font_montserrat_40, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_MenuDisplayLabel, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_align_to(ui_MenuDisplayLabel, ui_MenuDropdown, LV_ALIGN_OUT_TOP_MID, 0, -10);
 
     // --- Confirm button below dropdown ---
@@ -96,12 +96,16 @@ void ui_MenuSelection_screen_init()
     lv_label_set_text(lblConfirm, "Confirm");
     lv_obj_center(lblConfirm);
 
-    // --- Network status label (bottom-left) ---
-    ui_NetworkStatusLabel = lv_label_create(ui_MenuSelectionScreen);
-    lv_label_set_text(ui_NetworkStatusLabel, "Network: Checking...");
-    lv_obj_set_style_text_font(ui_NetworkStatusLabel, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_align(ui_NetworkStatusLabel, LV_ALIGN_BOTTOM_LEFT, 10, -10);
-    ui_update_network_status();
+    // Create the network status label
+    // gLabels.networkStatusLabel = createGlobalLabel(
+    //     ui_MenuSelectionScreen,
+    //     LV_ALIGN_BOTTOM_LEFT,
+    //     10, -10,
+    //     "Network: Checking...",
+    //     &lv_font_montserrat_14);
+
+    // Update status dynamically
+    // updateNetworkStatus();
 
     // --- Optional Logo (top-left) ---
     ui_MenuLogo = lv_image_create(ui_MenuSelectionScreen);
@@ -122,6 +126,5 @@ void ui_MenuSelection_screen_destroy()
     ui_MenuDropdown = nullptr;
     ui_ConfirmMenuButton = nullptr;
     ui_MenuDisplayLabel = nullptr;
-    ui_NetworkStatusLabel = nullptr;
     ui_MenuLogo = nullptr;
 }
