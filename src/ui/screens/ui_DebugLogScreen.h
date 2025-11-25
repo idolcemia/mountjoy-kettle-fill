@@ -13,5 +13,6 @@ extern lv_obj_t *ui_LogLabel;
 
 // Initialize the Debug Log screen
 void ui_DebugLog_screen_init();
+void ui_DebugLog_screen_destroy();
 
 #endif // UI_DEBUGLOG_H

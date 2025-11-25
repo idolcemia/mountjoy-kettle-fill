@@ -33,9 +33,9 @@ private:
     void setupMenus()
     {
         // Add all your menus here
-        menus.addMenu("WiFi Connect", ui_WiFiConnect_screen_init);
-        menus.addMenu("Debug Log", ui_DebugLog_screen_init);
-        menus.addMenu("User Selection", ui_UserSelection_screen_init);
+        menus.addMenu("WiFi Connect", ui_WiFiConnect_screen_init, ui_WiFiConnect_screen_destroy);
+        menus.addMenu("Debug Log", ui_DebugLog_screen_init, ui_DebugLog_screen_destroy);
+        menus.addMenu("User Selection", ui_UserSelection_screen_init, ui_UserSelection_screen_destroy);
 
         // Add more menus as needed:
         // menus.addMenu("User Selection", ui_UserSelectionScreen, ui_UserSelection_screen_init);

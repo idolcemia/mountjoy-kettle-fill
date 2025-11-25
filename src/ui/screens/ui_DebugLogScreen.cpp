@@ -89,3 +89,27 @@ void ui_DebugLog_screen_init()
             lv_obj_scroll_to_y(ui_LogContainer, LV_COORD_MAX, LV_ANIM_OFF);
         });
 }
+
+void ui_DebugLog_screen_destroy()
+{
+    // Delete log label
+    if (ui_LogLabel)
+    {
+        lv_obj_del(ui_LogLabel);
+        ui_LogLabel = nullptr;
+    }
+
+    // Delete log container
+    if (ui_LogContainer)
+    {
+        lv_obj_del(ui_LogContainer);
+        ui_LogContainer = nullptr;
+    }
+
+    // Delete main screen
+    if (ui_DebugLogScreen)
+    {
+        lv_obj_del(ui_DebugLogScreen);
+        ui_DebugLogScreen = nullptr;
+    }
+}
