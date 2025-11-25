@@ -1,9 +1,9 @@
 /*
- * Starter project using the following components:
+ * Mountjoy Kettle fill / Temp gauge using the following components:
  * Arduino Giga R1 M7
  * Giga Display Shield (800 x 480)
- * LvGL 8.x
- * 20251020 tested good.
+ * LvGL 9.x
+ * 20251125 tested good.
  * Enhanced with WiFi debug, retries, RSSI, MAC, and encryption info
  */
 
