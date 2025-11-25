@@ -32,9 +32,10 @@ private:
 
     void setupMenus()
     {
-        // if (_logger)
-        //     _logger->info("[Menus] Adding WiFi Connect menu");
-        // menus.addMenu("WiFi Connect", ui_WiFiConnect_screen_init);
+        // Add all your menus here
+        menus.addMenu("WiFi Connect", ui_WiFiConnect_screen_init);
+        menus.addMenu("Debug Log", ui_DebugLog_screen_init);
+        menus.addMenu("User Selection", ui_UserSelection_screen_init);
 
         // if (_logger)
         //     _logger->info("[Menus] Adding Debug Log menu");
