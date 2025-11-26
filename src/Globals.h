@@ -5,9 +5,15 @@
 #include <Users.h>
 #include <NetworkManager.h>
 #include <WiFi/WiFiNetworkManager.h>
-#include "ui/menus.h"
 #include "lvgl.h"
 #include "config.h"
+
+// -- Menus --
+#include <MenuManager.h>
+#include "ui/screens/ui_WiFiConnect.h"
+#include "ui/screens/ui_DebugLogScreen.h"
+#include "ui/screens/ui_UserSelectionScreen.h"
+#include "ui/screens/ui_MenuSelectionScreen.h"
 
 // Network credentials
 extern const char *ssid;
@@ -20,7 +26,7 @@ extern RumpshiftLogger logger;
 extern Users *users;
 extern NetworkManager *network;
 extern WiFiClientWrapper wifiClient;
-extern Menus menus;
+extern MenuManager menuManager;
 
 // Struct to hold LVGL labels that are used across screens
 struct GlobalLabels
@@ -30,5 +36,8 @@ struct GlobalLabels
     // add more global labels here as needed
 };
 extern GlobalLabels gLabels;
+
+void initGlobals();
+void initMenus();
 
 #endif

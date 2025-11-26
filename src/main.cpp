@@ -48,7 +48,8 @@ void setup()
     // wifiClient.begin(&logger);
     // users = new Users(wifiClient, &logger);
     // _getUsers();
-
+    
+    initGlobals();
     Display.begin();
     TouchDetector.begin();
     ui_init();

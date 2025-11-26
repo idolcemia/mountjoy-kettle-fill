@@ -16,7 +16,21 @@ NetworkManager *network =
         WiFiImpl::ARDUINO_WIFI,
         &logger);
 WiFiClientWrapper wifiClient;
-Menus menus;
+MenuManager menuManager;
 
 // Global labels
 GlobalLabels gLabels;
+
+void initGlobals()
+{
+    initMenus();
+}
+
+void initMenus()
+{
+    menuManager.setLogger(&logger);
+    menuManager.addMenu("Menu Selection", ui_MenuSelection_screen_init, ui_MenuSelection_screen_destroy);
+    menuManager.addMenu("WiFi Connect", ui_WiFiConnect_screen_init, ui_WiFiConnect_screen_destroy);
+    menuManager.addMenu("Debug Log", ui_DebugLog_screen_init, ui_DebugLog_screen_destroy);
+    menuManager.addMenu("User Selection", ui_UserSelection_screen_init, ui_UserSelection_screen_destroy);
+}

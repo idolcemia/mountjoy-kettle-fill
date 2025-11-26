@@ -58,7 +58,8 @@ void ui_update_network_status()
 
 void ui_MenuSelection_screen_start()
 {
-    Menus::getInstance().menus.loadMenu("Menu Selection");
+    // Menus::getInstance().menus.loadMenu("Menu Selection");
+    menuManager.loadMenu("Menu Selection");
 }
 
 // Initialize the screen
@@ -76,7 +77,7 @@ void ui_MenuSelection_screen_init()
     ui_MenuDropdown = lv_dropdown_create(ui_MenuSelectionScreen);
     lv_dropdown_set_options(
         ui_MenuDropdown,
-        Menus::getInstance().menus.getMenusDelimit("\n", "Menu Selection").c_str());
+        menuManager.getMenusDelimit("\n", "Menu Selection").c_str());
     lv_obj_set_size(ui_MenuDropdown, 314, 50);
     lv_obj_align(ui_MenuDropdown, LV_ALIGN_CENTER, 0, 50);
     lv_obj_add_flag(ui_MenuDropdown, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
