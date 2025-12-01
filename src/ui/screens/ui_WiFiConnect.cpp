@@ -18,19 +18,6 @@ lv_obj_t *ui_ConnectWiFiButton = nullptr;
 lv_obj_t *ui_SelectSSIDLabel = nullptr;
 lv_obj_t *ui_WiFiStatusLabel = nullptr;
 
-static String buildDropdownOptionsFromScan()
-{
-    String options;
-    int n = WiFi.scanNetworks();
-    for (int i = 0; i < n; i++)
-    {
-        options += WiFi.SSID(i);
-        if (i < n - 1)
-            options += '\n';
-    }
-    return options;
-}
-
 // events are thin — actual logic in your handlers (events.h / events.cpp)
 void ui_event_wifi_dropdown(lv_event_t *e)
 {
@@ -53,19 +40,19 @@ void ui_WiFiConnect_screen_init(void)
     ui_WiFiConnectScreen = lv_obj_create(nullptr);
     lv_obj_remove_flag(ui_WiFiConnectScreen, LV_OBJ_FLAG_SCROLLABLE);
 
-    // Background styling to match UserSelection screen
+    // Background styling
     lv_obj_set_style_bg_color(ui_WiFiConnectScreen, lv_color_hex(0xEE7B01), LV_PART_MAIN);
     lv_obj_set_style_bg_opa(ui_WiFiConnectScreen, 255, LV_PART_MAIN);
     lv_obj_set_style_bg_grad_color(ui_WiFiConnectScreen, lv_color_hex(0x2E1A05), LV_PART_MAIN);
     lv_obj_set_style_bg_grad_dir(ui_WiFiConnectScreen, LV_GRAD_DIR_VER, LV_PART_MAIN);
 
-    // BuildShift brand image (same as user selection)
+    // Logo
     lv_obj_t *ui_BSLogo = lv_image_create(ui_WiFiConnectScreen);
     lv_image_set_src(ui_BSLogo, &ui_img_buildshift_brand_png);
     lv_obj_set_align(ui_BSLogo, LV_ALIGN_CENTER);
     lv_obj_set_y(ui_BSLogo, -157);
 
-    // Title / select label
+    // Title
     ui_SelectSSIDLabel = lv_label_create(ui_WiFiConnectScreen);
     lv_label_set_text(ui_SelectSSIDLabel, "Select WiFi Network");
     lv_obj_set_style_text_color(ui_SelectSSIDLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
@@ -77,25 +64,16 @@ void ui_WiFiConnect_screen_init(void)
     lv_obj_set_align(ui_SelectSSIDLabel, LV_ALIGN_CENTER);
     lv_obj_set_y(ui_SelectSSIDLabel, -45);
 
-    // Dropdown (populated from WiFi scan)
+    // Dropdown (empty for now; spinner will cover)
     ui_WiFiDropdown = lv_dropdown_create(ui_WiFiConnectScreen);
-
-    String options = buildDropdownOptionsFromScan();
-    if (options.length() == 0)
-        options = "No networks found";
-    lv_dropdown_set_options(ui_WiFiDropdown, options.c_str());
-
+    lv_dropdown_set_options(ui_WiFiDropdown, "Scanning...");
     lv_obj_set_width(ui_WiFiDropdown, 314);
     lv_obj_set_height(ui_WiFiDropdown, LV_SIZE_CONTENT);
-
-    // **FIX: proper centered layout, no conflicting x/y forcing**
     lv_obj_align(ui_WiFiDropdown, LV_ALIGN_CENTER, 0, 50);
-
-    lv_obj_add_flag(ui_WiFiDropdown, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
     lv_obj_set_style_bg_color(ui_WiFiDropdown, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
     lv_obj_set_style_bg_opa(ui_WiFiDropdown, 255, LV_PART_MAIN);
 
-    // Connect Button (centered)
+    // Connect Button
     ui_ConnectWiFiButton = lv_button_create(ui_WiFiConnectScreen);
     lv_obj_set_size(ui_ConnectWiFiButton, 266, 50);
     lv_obj_align(ui_ConnectWiFiButton, LV_ALIGN_CENTER, 0, 150);
@@ -107,33 +85,65 @@ void ui_WiFiConnect_screen_init(void)
     lv_obj_set_style_text_font(ui_ConnectLabel, &lv_font_montserrat_40, LV_PART_MAIN);
     lv_obj_align(ui_ConnectLabel, LV_ALIGN_CENTER, 0, 0);
 
-    // Status Label (centered above button)
+    // Status Label
     ui_WiFiStatusLabel = lv_label_create(ui_WiFiConnectScreen);
-    lv_label_set_text(ui_WiFiStatusLabel, "Status: Idle");
+    lv_label_set_text(ui_WiFiStatusLabel, "Status: Scanning...");
     lv_obj_set_style_text_color(ui_WiFiStatusLabel, lv_color_hex(0x000000), LV_PART_MAIN);
     lv_obj_set_style_text_font(ui_WiFiStatusLabel, &lv_font_montserrat_40, LV_PART_MAIN);
+    lv_obj_align_to(ui_WiFiStatusLabel, ui_ConnectWiFiButton, LV_ALIGN_OUT_TOP_MID, 0, -10);
 
-    lv_obj_align_to(
-        ui_WiFiStatusLabel,
-        ui_ConnectWiFiButton,
-        LV_ALIGN_OUT_TOP_MID,
-        0, -10);
-
-    // Hook events
+    // Events
     lv_obj_add_event_cb(ui_WiFiDropdown, ui_event_wifi_dropdown, LV_EVENT_ALL, nullptr);
     lv_obj_add_event_cb(ui_ConnectWiFiButton, ui_event_ConnectWiFiButton, LV_EVENT_ALL, nullptr);
 
-    // Expose uic_ vars
-    uic_SelectSSIDLabel = ui_SelectSSIDLabel;
-    uic_ConnectWiFiButton = ui_ConnectWiFiButton;
-    uic_WiFiStatusLabel = ui_WiFiStatusLabel;
-
+    // Global labels
     ui_GlobalLabels::initNetworkStatus(ui_WiFiConnectScreen);
     ui_GlobalLabels::initUserSelectionLabel(ui_WiFiConnectScreen);
 
-    // Load this screen
+    // ---- SAFE SPINNER ----
+    LvglHelperUtils::Spinner *spinner =
+        new LvglHelperUtils::Spinner(LvglHelperUtils::createLvglSpinner(
+            ui_WiFiConnectScreen, 60));
+
+    // Timer — performs WiFi scan ONCE
+    lv_timer_create(
+        [](lv_timer_t *t)
+        {
+            LvglHelperUtils::Spinner *sp =
+                (LvglHelperUtils::Spinner *)lv_timer_get_user_data(t);
+
+            // Perform scan (blocking OK; spinner runs)
+            int n = WiFi.scanNetworks();
+            String opts;
+
+            if (n > 0)
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    opts += WiFi.SSID(i);
+                    if (i < n - 1)
+                        opts += "\n";
+                }
+            }
+            else
+            {
+                opts = "No networks found";
+            }
+
+            // Update dropdown
+            lv_dropdown_set_options(ui_WiFiDropdown, opts.c_str());
+            lv_label_set_text(ui_WiFiStatusLabel, "Status: Done");
+
+            // Remove spinner safely
+            LvglHelperUtils::deleteLvglSpinner(*sp);
+            delete sp;
+
+            lv_timer_del(t);
+        },
+        250, spinner);
+
+    // Load screen
     lv_scr_load(ui_WiFiConnectScreen);
-    // lv_scr_load_anim(ui_WiFiConnectScreen, LV_SCR_LOAD_ANIM_FADE_ON, 300, 0, true);
 }
 
 void ui_WiFiConnect_screen_destroy(void)
