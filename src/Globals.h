@@ -25,7 +25,7 @@ extern const int port;
 extern RumpshiftLogger logger;
 extern Users *users;
 extern NetworkManager *network;
-extern WiFiClientWrapper wifiClient;
+extern WiFiClientWrapper *wifiClient;
 extern MenuManager menuManager;
 
 // Struct to hold LVGL labels that are used across screens
@@ -39,5 +39,8 @@ extern GlobalLabels gLabels;
 
 void initGlobals();
 void initMenus();
+void initUsers();
+void initWiFiClient();
+void _getUsers();
 
 #endif

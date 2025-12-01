@@ -15,7 +15,7 @@ NetworkManager *network =
         password,
         WiFiImpl::ARDUINO_WIFI,
         &logger);
-WiFiClientWrapper wifiClient;
+WiFiClientWrapper *wifiClient = nullptr;
 MenuManager menuManager;
 
 // Global labels
@@ -24,6 +24,8 @@ GlobalLabels gLabels;
 void initGlobals()
 {
     initMenus();
+    initWiFiClient();
+    initUsers();
 }
 
 void initMenus()
@@ -33,4 +35,32 @@ void initMenus()
     menuManager.addMenu("WiFi Connect", ui_WiFiConnect_screen_init, ui_WiFiConnect_screen_destroy);
     menuManager.addMenu("Debug Log", ui_DebugLog_screen_init, ui_DebugLog_screen_destroy);
     menuManager.addMenu("User Selection", ui_UserSelection_screen_init, ui_UserSelection_screen_destroy);
+}
+
+void initWiFiClient()
+{
+    wifiClient = new WiFiClientWrapper();
+    wifiClient->begin(&logger);
+}
+
+void initUsers()
+{
+    users = new Users(*wifiClient, &logger);
+}
+
+void _getUsers()
+{
+    const char *host = "3.136.200.179";
+    const int port = 8888;
+    const char *url =
+        "/notion-api/integrations/notion/consoleIntegration/users?include=name,id&excludeNames=Mountjoy+Sparkling,Ritual+Coffee+Roasters,n2y+integration,Console,Product+Management";
+
+    // HttpResponse resp = testClient.http().get(host, port, url);
+    // HttpResponse resp = wifiClient.http().get(host, port, url);
+    // logger.info("[RESPONSE - BODY] " + resp.body());
+
+    HttpResponse resp = users->fetch(host, port, url);
+    logger.info("[RESPONSE - BODY] " + resp.body());
+    users->parse(resp.body());
+    users->printUsers();
 }

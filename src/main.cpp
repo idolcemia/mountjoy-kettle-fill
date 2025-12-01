@@ -33,7 +33,8 @@
 Arduino_H7_Video Display(800, 480, GigaDisplayShield);
 Arduino_GigaDisplayTouch TouchDetector;
 
-void _getUsers();
+
+WiFiClientWrapper testClient;
 void _log();
 
 void setup()
@@ -47,9 +48,9 @@ void setup()
 
     // wifiClient.begin(&logger);
     // users = new Users(wifiClient, &logger);
-    // _getUsers();
-    
+
     initGlobals();
+    testClient.begin(&logger);
     Display.begin();
     TouchDetector.begin();
     ui_init();
@@ -100,21 +101,6 @@ void _log()
     const char *url = API_PATH;
     logger.info("[HTTP_LOG] " + output);
 
-    HttpResponse resp = wifiClient.http().post(host, port, url, output);
-    logger.info("[POST RESPONSE - FULL] " + resp.full());
-}
-
-void _getUsers()
-{
-    const char *host = "3.136.200.179";
-    const int port = 8888;
-    const char *url = "/notion-api/integrations/notion/consoleIntegration/users?include=name,id&excludeNames=Mountjoy+Sparkling,Ritual+Coffee+Roasters,n2y+integration,Console,Product+Management";
-
-    // HttpResponse resp = wifiClient.http().get(host, port, url);
-    // logger.info("[RESPONSE - BODY] " + resp.body());
-
-    HttpResponse resp = users->fetch(host, port, url);
-    logger.info("[RESPONSE - BODY] " + resp.body());
-    users->parse(resp.body());
-    users->printUsers();
+    // HttpResponse resp = wifiClient.http().post(host, port, url, output);
+    // logger.info("[POST RESPONSE - FULL] " + resp.full());
 }

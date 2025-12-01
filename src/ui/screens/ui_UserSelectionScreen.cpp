@@ -67,9 +67,19 @@ void ui_UserSelection_screen_init(void)
             logger.error("[UI] 'users' pointer is nullptr, cannot populate dropdown!");
         }
 
+        if (network->isConnected())
+        {
+            logger.info("Network is connected, proceding with users fetch.");
+        }
+        else
+        {
+            logger.error("Network is NOT connected.");
+        }
+
         ui_Dropdown1 = lv_dropdown_create(ui_UserSelectionScreen);
         if (ui_Dropdown1)
         {
+            _getUsers();
             const String userListStd =
                 users
                     ? users->getUsersDelimit("\n")
