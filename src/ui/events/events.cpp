@@ -5,6 +5,7 @@
 #include "ui/screens/ui_DebugLogScreen.h"
 #include "ui/screens/ui_MenuSelectionScreen.h"
 #include "ui/screens/labels/ui_GlobalLabels.h"
+#include "ui/screens/ui_GlobalButtons.h"
 
 void handleMenuSelectionDropdownEvent(lv_event_t *e)
 {
@@ -28,6 +29,7 @@ void handleMenuSelectionButtonEvent(lv_event_t *e)
     String selectedText = String(buf);
     logger.info("Dropdown selected text: " + selectedText);
 
+    menuManager.setCachedScreen(PasteurizerMenu::MENU_MENU_SELECTION, ui_MenuSelectionScreen);
     menuManager.queueMenu(selectedText);
     // menuManager.loadMenu(selectedText);
     // ui_MenuSelection_screen_destroy();
@@ -81,7 +83,7 @@ void handleConnectWiFiButton(lv_event_t *e)
 {
 
     // Load the debug screen before connecting
-    ui_DebugLog_screen_init();
+    // ui_DebugLog_screen_init();
 
     logger.info("Starting WiFi connection...");
 
@@ -136,6 +138,8 @@ void handleConnectWiFiButton(lv_event_t *e)
     {
         lv_label_set_text(label, "Connect"); // reset to original
     }
+
+    menuManager.queueMenu(PasteurizerMenu::MENU_DEBUG_LOG);
 
     lv_refr_now(NULL);
 }

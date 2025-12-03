@@ -21,18 +21,15 @@ extern "C"
     extern lv_obj_t *ui_MenuLogo;
 
     // Initialize the screen and all child elements
-    void ui_MenuSelection_screen_init();
-    void ui_MenuSelection_screen_start();
-
+    extern void ui_MenuSelection_screen_init();
+    extern void ui_MenuSelection_screen_start();
+    extern void ui_MenuSelectionScreenUpdate();
     // Destroy the screen and reset pointers
-    void ui_MenuSelection_screen_destroy();
+    extern void ui_MenuSelection_screen_destroy();
 
     // Event callbacks
     void ui_event_menu_dropdown(lv_event_t *e);
     void ui_event_confirm_menu_button(lv_event_t *e);
-
-    // Update the network status label color/text
-    void ui_update_network_status();
 
 #ifdef __cplusplus
 } /* extern "C" */

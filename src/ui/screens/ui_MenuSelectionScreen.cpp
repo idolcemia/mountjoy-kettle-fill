@@ -9,7 +9,7 @@ lv_obj_t *ui_MenuSelectionScreen = nullptr;
 lv_obj_t *ui_MenuDropdown = nullptr;
 lv_obj_t *ui_ConfirmMenuButton = nullptr;
 lv_obj_t *ui_MenuDisplayLabel = nullptr;
-lv_obj_t *ui_NetworkStatusLabel = nullptr;
+// lv_obj_t *ui_NetworkStatusLabel = nullptr;
 lv_obj_t *ui_MenuLogo = nullptr;
 
 // Event: dropdown changed
@@ -39,31 +39,11 @@ void ui_event_confirm_menu_button(lv_event_t *e)
     }
 }
 
-// Update network status label
-void ui_update_network_status()
-{
-    if (!ui_NetworkStatusLabel)
-        return;
-
-    if (network && network->isConnected())
-    {
-        lv_label_set_text(ui_NetworkStatusLabel, "Network: Connected");
-        lv_obj_set_style_text_color(ui_NetworkStatusLabel, lv_color_hex(0x00FF00), LV_PART_MAIN | LV_STATE_DEFAULT);
-    }
-    else
-    {
-        lv_label_set_text(ui_NetworkStatusLabel, "Network: Disconnected");
-        lv_obj_set_style_text_color(ui_NetworkStatusLabel, lv_color_hex(0xFF0000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    }
-}
-
 void ui_MenuSelection_screen_start()
 {
-    // Menus::getInstance().menus.loadMenu("Menu Selection");
-    // menuManager.loadMenu("Menu Selection");
-    menuManager.queueMenu("Menu Selection");
+    menuManager.queueMenu(PasteurizerMenu::MENU_MENU_SELECTION);
     lv_timer_handler();
-    menuManager.setCachedScreen("Menu Selection", ui_MenuSelectionScreen);
+    menuManager.setCachedScreen(PasteurizerMenu::MENU_MENU_SELECTION, ui_MenuSelectionScreen);
 }
 
 // Initialize the screen
@@ -81,7 +61,7 @@ void ui_MenuSelection_screen_init()
     ui_MenuDropdown = lv_dropdown_create(ui_MenuSelectionScreen);
     lv_dropdown_set_options(
         ui_MenuDropdown,
-        menuManager.getMenusDelimit("\n", "Menu Selection").c_str());
+        menuManager.getMenusDelimit("\n", PasteurizerMenu::MENU_MENU_SELECTION).c_str());
     lv_obj_set_size(ui_MenuDropdown, 314, 50);
     lv_obj_align(ui_MenuDropdown, LV_ALIGN_CENTER, 0, 50);
     lv_obj_add_flag(ui_MenuDropdown, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
@@ -110,11 +90,11 @@ void ui_MenuSelection_screen_init()
     lv_obj_center(lblConfirm);
 
     // --- Network status label (bottom-left) ---
-    ui_NetworkStatusLabel = lv_label_create(ui_MenuSelectionScreen);
-    lv_label_set_text(ui_NetworkStatusLabel, "Network: Checking...");
-    lv_obj_set_style_text_font(ui_NetworkStatusLabel, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_align(ui_NetworkStatusLabel, LV_ALIGN_BOTTOM_LEFT, 10, -10);
-    ui_update_network_status();
+    // ui_NetworkStatusLabel = lv_label_create(ui_MenuSelectionScreen);
+    // lv_label_set_text(ui_NetworkStatusLabel, "Network: Checking...");
+    // lv_obj_set_style_text_font(ui_NetworkStatusLabel, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_align(ui_NetworkStatusLabel, LV_ALIGN_BOTTOM_LEFT, 10, -10);
+    ui_GlobalLabels::initNetworkStatus(ui_MenuSelectionScreen);
 
     // --- Optional Logo (top-left) ---
     ui_MenuLogo = lv_image_create(ui_MenuSelectionScreen);
@@ -122,12 +102,11 @@ void ui_MenuSelection_screen_init()
     lv_obj_set_size(ui_MenuLogo, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
     lv_obj_align(ui_MenuLogo, LV_ALIGN_TOP_MID, 0, 10);
 
-    ui_GlobalButtons::initGlobalButtons();
+    ui_GlobalButtons::initGlobalButtons(ui_MenuSelectionScreen);
     ui_GlobalLabels::initUserSelectionLabel(ui_MenuSelectionScreen);
 
-    // Load the screen
     lv_scr_load(ui_MenuSelectionScreen);
-    // lv_scr_load_anim(ui_MenuSelectionScreen, LV_SCR_LOAD_ANIM_FADE_ON, 300, 0, true);
+    menuManager.setCachedScreen(PasteurizerMenu::MENU_MENU_SELECTION, ui_MenuSelectionScreen);
 }
 
 void ui_MenuSelection_screen_destroy()
@@ -139,6 +118,49 @@ void ui_MenuSelection_screen_destroy()
     ui_MenuDropdown = nullptr;
     ui_ConfirmMenuButton = nullptr;
     ui_MenuDisplayLabel = nullptr;
-    ui_NetworkStatusLabel = nullptr;
+    // ui_NetworkStatusLabel = nullptr;
     ui_MenuLogo = nullptr;
+}
+
+void ui_MenuSelectionScreenUpdate()
+{
+    // --- 0. Ensure screen exists ---
+    if (!ui_MenuSelectionScreen)
+    {
+        logger.info("[ui_MenuSelectionScreen] screen not initialized, skipping update.");
+        return;
+    }
+
+    // --- 1. Refresh dropdown options (if menu list has changed) ---
+    if (ui_MenuDropdown)
+    {
+        lv_dropdown_set_options(
+            ui_MenuDropdown,
+            menuManager.getMenusDelimit("\n", PasteurizerMenu::MENU_MENU_SELECTION).c_str());
+    }
+
+    // --- 2. Update display label to match current dropdown value ---
+    if (ui_MenuDisplayLabel && ui_MenuDropdown)
+    {
+        char selected[64];
+        lv_dropdown_get_selected_str(ui_MenuDropdown, selected, sizeof(selected));
+        lv_label_set_text(
+            ui_MenuDisplayLabel,
+            selected && selected[0]
+                ? selected
+                : "Make a selection");
+    }
+
+    // --- 3. Update network status label ---
+    ui_GlobalLabels::initNetworkStatus(ui_MenuSelectionScreen);
+    ui_GlobalButtons::updateGlobalButtons(ui_MenuSelectionScreen);
+
+    // --- 4. Reattach global buttons (if needed after Full Screen reload) ---
+    // ui_GlobalButtons::syncToScreen(ui_MenuSelectionScreen);
+
+    // --- 5. Reattach global labels ---
+    // ui_GlobalLabels::syncUserSelectionLabel(ui_MenuSelectionScreen);
+
+    // --- 6. Restore menuManager cache (prevents flicker on back navigation) ---
+    menuManager.setCachedScreen(PasteurizerMenu::MENU_MENU_SELECTION, ui_MenuSelectionScreen);
 }

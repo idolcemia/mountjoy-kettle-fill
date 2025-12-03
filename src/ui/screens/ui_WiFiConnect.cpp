@@ -3,6 +3,7 @@
 
 #include "ui/ui.h"
 #include "ui/screens/labels/ui_GlobalLabels.h"
+#include "ui/screens/ui_GlobalButtons.h"
 #include "Globals.h"
 #include "ui/events/events.h"
 #include "ui_WiFiConnect.h"
@@ -144,8 +145,9 @@ void ui_WiFiConnect_screen_init(void)
 
     // Load screen
     lv_scr_load(ui_WiFiConnectScreen);
+    ui_GlobalButtons::updateGlobalButtons(ui_WiFiConnectScreen);
 
-    menuManager.setCachedScreen("WiFi Connect", ui_WiFiConnectScreen);
+    menuManager.setCachedScreen(PasteurizerMenu::MENU_WIFI_CONNECT, ui_WiFiConnectScreen);
 }
 
 void ui_WiFiConnectScreenUpdate()
@@ -207,6 +209,9 @@ void ui_WiFiConnectScreenUpdate()
     // --- 4. Update global labels if needed ---
     ui_GlobalLabels::updateNetworkStatus();
     ui_GlobalLabels::updateUserSelectionLabel();
+    ui_GlobalButtons::updateGlobalButtons(ui_WiFiConnectScreen);
+
+    menuManager.setCachedScreen(PasteurizerMenu::MENU_WIFI_CONNECT, ui_WiFiConnectScreen);
 }
 
 void ui_WiFiConnect_screen_destroy(void)

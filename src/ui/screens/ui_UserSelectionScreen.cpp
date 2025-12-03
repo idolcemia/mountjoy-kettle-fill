@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "ui/events/events.h"
 #include "ui/screens/labels/ui_GlobalLabels.h"
+#include "ui/screens/ui_GlobalButtons.h"
 #include "lvgl.h"
 
 // Exposed UI component pointers
@@ -183,10 +184,11 @@ void ui_UserSelection_screen_init(void)
      *  Show Screen
      * -----------------------------------------------------*/
     lv_scr_load(ui_UserSelectionScreen);
+    ui_GlobalButtons::updateGlobalButtons(ui_UserSelectionScreen);
 
     logger.info("[UI] User Selection screen loaded successfully");
 
-    menuManager.setCachedScreen("User Selection", ui_UserSelectionScreen);
+    menuManager.setCachedScreen(PasteurizerMenu::MENU_USER_SELECTION, ui_UserSelectionScreen);
 }
 
 void ui_UserSelectionScreenUpdate()
@@ -242,6 +244,9 @@ void ui_UserSelectionScreenUpdate()
             lv_obj_set_style_bg_color(ui_UserDropdown, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
             lv_obj_set_style_text_color(ui_UserDropdown, lv_color_hex(0x000000), LV_PART_MAIN);
         }
+
+        ui_GlobalButtons::updateGlobalButtons(ui_UserSelectionScreen);
+        menuManager.setCachedScreen(PasteurizerMenu::MENU_USER_SELECTION, ui_UserSelectionScreen);
     }
 
     /* -------------------------------------------------------

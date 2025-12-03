@@ -31,15 +31,29 @@ void initGlobals()
 
 void initMenus()
 {
+    // --- Initialization ---
     logger.info("[Globals] Running init menus.");
     menuManager.setLogger(&logger);
-    menuManager.addMenu("Menu Selection", ui_MenuSelection_screen_init, ui_MenuSelection_screen_destroy);
-    menuManager.addMenu("WiFi Connect", ui_WiFiConnect_screen_init, ui_WiFiConnect_screen_destroy);
-    menuManager.setUpdater("WiFi Connect", ui_WiFiConnectScreenUpdate);
-    menuManager.addMenu("Debug Log", ui_DebugLog_screen_init, ui_DebugLog_screen_destroy);
-    menuManager.addMenu("User Selection", ui_UserSelection_screen_init, ui_UserSelection_screen_destroy);
-    menuManager.setUpdater("User Selection", ui_UserSelectionScreenUpdate);
-    menuManager.addMenu("Temp Control", ui_TempControl_screen_init, ui_TempControl_screen_destroy);
+
+    // Menu Selection
+    menuManager.addMenu(PasteurizerMenu::MENU_MENU_SELECTION, ui_MenuSelection_screen_init, ui_MenuSelection_screen_destroy);
+    menuManager.setUpdater(PasteurizerMenu::MENU_MENU_SELECTION, ui_MenuSelectionScreenUpdate);
+
+    // WiFi
+    menuManager.addMenu(PasteurizerMenu::MENU_WIFI_CONNECT, ui_WiFiConnect_screen_init, ui_WiFiConnect_screen_destroy);
+    menuManager.setUpdater(PasteurizerMenu::MENU_WIFI_CONNECT, ui_WiFiConnectScreenUpdate);
+
+    // Debug Log
+    menuManager.addMenu(PasteurizerMenu::MENU_DEBUG_LOG, ui_DebugLog_screen_init, ui_DebugLog_screen_destroy);
+    menuManager.setUpdater(PasteurizerMenu::MENU_DEBUG_LOG, ui_DebugLogScreenUpdate);
+
+    // User Selection
+    menuManager.addMenu(PasteurizerMenu::MENU_USER_SELECTION, ui_UserSelection_screen_init, ui_UserSelection_screen_destroy);
+    menuManager.setUpdater(PasteurizerMenu::MENU_USER_SELECTION, ui_UserSelectionScreenUpdate);
+
+    // Temp Control
+    menuManager.addMenu(PasteurizerMenu::MENU_TEMP_CONTROL, ui_TempControl_screen_init, ui_TempControl_screen_destroy);
+    menuManager.setUpdater(PasteurizerMenu::MENU_TEMP_CONTROL, ui_TempControlScreenUpdate);
 }
 
 void initWiFiClient()

@@ -59,14 +59,15 @@ void setup()
 void loop()
 {
     lv_timer_handler();
-    ui_GlobalLabels::updateNetworkStatus();
-    ui_GlobalLabels::networkChecked();
+    // ui_GlobalLabels::updateNetworkStatus();
+    // ui_GlobalLabels::networkChecked();
 
     // Only update once LVGL is stable
-    if (millis() > 3000) // wait 3s after boot
-    {
-        Diagnostic::updateDefault();
-    }
+    // Maybe move this to particular screens
+    // if (millis() > 3000) // wait 3s after boot
+    // {
+    //     Diagnostic::updateDefault();
+    // }
 
     delay(16);
 }

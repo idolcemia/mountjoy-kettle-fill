@@ -1,6 +1,7 @@
 #include "lvgl.h"
-#include "Globals.h" // for logger
+#include "Globals.h"
 #include "ui/ui.h"
+#include "ui/screens/ui_GlobalButtons.h"
 
 lv_obj_t *ui_DebugLogScreen = nullptr;
 lv_obj_t *ui_LogContainer = nullptr;
@@ -63,6 +64,8 @@ void ui_DebugLog_screen_init()
         btnBack,
         [](lv_event_t *e)
         {
+            // TODO: can go through menuManger to do this
+            ui_WiFiConnectScreenUpdate();
             lv_scr_load(ui_WiFiConnectScreen);
         },
         LV_EVENT_CLICKED, nullptr);
@@ -73,23 +76,14 @@ void ui_DebugLog_screen_init()
     // Load the screen
     lv_scr_load(ui_DebugLogScreen);
 
+    ui_GlobalButtons::updateGlobalButtons(ui_DebugLogScreen);
+
     // Seed logs with existing buffered text
     lv_label_set_text(ui_LogLabel, logger.getLogText().c_str());
 
-    // Logger callback for real-time updates
-    logger.setCallback(
-        [](const String &line)
-        {
-            if (!ui_LogLabel)
-                return;
+    _attachDebugLogCallback();
 
-            static String buffer;
-            buffer += line + "\n";
-            lv_label_set_text(ui_LogLabel, buffer.c_str());
-            lv_obj_scroll_to_y(ui_LogContainer, LV_COORD_MAX, LV_ANIM_OFF);
-        });
-    
-    menuManager.setCachedScreen("Debug Log", ui_DebugLogScreen);
+    menuManager.setCachedScreen(PasteurizerMenu::MENU_DEBUG_LOG, ui_DebugLogScreen);
 }
 
 void ui_DebugLog_screen_destroy()
@@ -114,4 +108,63 @@ void ui_DebugLog_screen_destroy()
         lv_obj_del(ui_DebugLogScreen);
         ui_DebugLogScreen = nullptr;
     }
+}
+
+void ui_DebugLogScreenUpdate()
+{
+    if (!ui_DebugLogScreen || !ui_LogContainer || !ui_LogLabel)
+        return;
+
+    // --- 1. Refresh displayed logs from the logger buffer ---
+    lv_label_set_text(ui_LogLabel, logger.getLogText().c_str());
+    lv_obj_scroll_to_y(ui_LogContainer, LV_COORD_MAX, LV_ANIM_OFF);
+
+    // --- 2. Reattach the logger callback ---
+    _attachDebugLogCallback();
+
+    // --- 3. Restore Back button visibility logic ---
+    // Search for the button: it was created as a direct child of ui_DebugLogScreen.
+    lv_obj_t *btnBack = nullptr;
+    uint32_t childCount = lv_obj_get_child_cnt(ui_DebugLogScreen);
+
+    for (uint32_t i = 0; i < childCount; i++)
+    {
+        lv_obj_t *child = lv_obj_get_child(ui_DebugLogScreen, i);
+        // crude but safe way to identify the button:
+        // first (and only) LVGL button created directly under the screen
+        if (lv_obj_check_type(child, &lv_button_class))
+        {
+            btnBack = child;
+            break;
+        }
+    }
+
+    if (btnBack)
+    {
+        // Re-hide until connection state is known
+        lv_obj_add_flag(btnBack, LV_OBJ_FLAG_HIDDEN);
+
+        // Recreate the back-button timer since old timers do NOT persist
+        lv_timer_create(backButtonTimerCallback, 500, btnBack);
+    }
+
+    ui_GlobalButtons::updateGlobalButtons(ui_DebugLogScreen);
+    menuManager.setCachedScreen(PasteurizerMenu::MENU_DEBUG_LOG, ui_DebugLogScreen);
+}
+
+// Logger callback for real-time updates
+static void _attachDebugLogCallback()
+{
+    logger.setCallback(
+        [](const String &line)
+        {
+            if (!ui_LogLabel)
+                return;
+
+            static String buffer;
+            buffer += line + "\n";
+
+            lv_label_set_text(ui_LogLabel, buffer.c_str());
+            lv_obj_scroll_to_y(ui_LogContainer, LV_COORD_MAX, LV_ANIM_OFF);
+        });
 }

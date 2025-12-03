@@ -10,6 +10,7 @@ extern "C"
 
     // SCREEN: ui_TempControlScreen
     extern void ui_TempControl_screen_init(void);
+    extern void ui_TempControlScreenUpdate();
     extern void ui_TempControl_screen_destroy(void);
     extern lv_obj_t *ui_TempControlScreen;
 

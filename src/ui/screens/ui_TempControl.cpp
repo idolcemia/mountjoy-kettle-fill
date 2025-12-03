@@ -1,5 +1,6 @@
 #include "ui/ui.h"
 #include "ui/screens/labels/ui_GlobalLabels.h"
+#include "ui/screens/ui_GlobalButtons.h"
 #include "Globals.h"
 #include "ui/events/events.h"
 #include "ui_TempControl.h"
@@ -497,8 +498,8 @@ void ui_TempControl_screen_init(void)
 
     // Load screen
     lv_scr_load(ui_TempControlScreen);
-
-    menuManager.setCachedScreen("Temp Control", ui_TempControlScreen);
+    ui_GlobalButtons::updateGlobalButtons(ui_TempControlScreen);
+    menuManager.setCachedScreen(PasteurizerMenu::MENU_TEMP_CONTROL, ui_TempControlScreen);
 }
 
 void ui_TempControl_screen_destroy(void)
@@ -533,4 +534,45 @@ void ui_TempControl_screen_destroy(void)
     uic_SaveSettingsButton = nullptr;
     uic_CancelButton = nullptr;
     uic_SettingsStatusLabel = nullptr;
+}
+
+void ui_TempControlScreenUpdate()
+{
+    if (!ui_TempControlScreen)
+    {
+        // Screen not created yet — nothing to update
+        return;
+    }
+
+    // Update each spinbox safely
+    if (ui_TargetTempSpinbox)
+        lv_spinbox_set_value(ui_TargetTempSpinbox, (int32_t)(g_TempSettings.targetTemp * 10));
+
+    if (ui_KpSpinbox)
+        lv_spinbox_set_value(ui_KpSpinbox, (int32_t)(g_TempSettings.kp * 100));
+
+    if (ui_KiSpinbox)
+        lv_spinbox_set_value(ui_KiSpinbox, (int32_t)(g_TempSettings.ki * 1000));
+
+    if (ui_KdSpinbox)
+        lv_spinbox_set_value(ui_KdSpinbox, (int32_t)(g_TempSettings.kd * 100));
+
+    if (ui_RampUpSpinbox)
+        lv_spinbox_set_value(ui_RampUpSpinbox, (int32_t)(g_TempSettings.rampUp * 10));
+
+    if (ui_RampDownSpinbox)
+        lv_spinbox_set_value(ui_RampDownSpinbox, (int32_t)(g_TempSettings.rampDown * 10));
+
+    if (ui_CrossoverSpinbox)
+        lv_spinbox_set_value(ui_CrossoverSpinbox, (int32_t)(g_TempSettings.crossover * 10));
+
+    if (ui_IntegratorSpinbox)
+        lv_spinbox_set_value(ui_IntegratorSpinbox, (int32_t)(g_TempSettings.integratorLimit * 10));
+
+    // Optional: clear any previous status text
+    if (ui_SettingsStatusLabel)
+        lv_label_set_text(ui_SettingsStatusLabel, "");
+
+    ui_GlobalButtons::updateGlobalButtons(ui_TempControlScreen);
+    menuManager.setCachedScreen(PasteurizerMenu::MENU_TEMP_CONTROL, ui_TempControlScreen);
 }

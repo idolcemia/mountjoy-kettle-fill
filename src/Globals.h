@@ -30,6 +30,15 @@ extern NetworkManager *network;
 extern WiFiClientWrapper *wifiClient;
 extern MenuManager menuManager;
 
+namespace PasteurizerMenu
+{
+    constexpr const char *MENU_MENU_SELECTION = "Menu Selection";
+    constexpr const char *MENU_WIFI_CONNECT = "WiFi Connect";
+    constexpr const char *MENU_DEBUG_LOG = "Debug Log";
+    constexpr const char *MENU_USER_SELECTION = "User Selection";
+    constexpr const char *MENU_TEMP_CONTROL = "Temp Control";
+}
+
 // Struct to hold LVGL labels that are used across screens
 struct GlobalLabels
 {
