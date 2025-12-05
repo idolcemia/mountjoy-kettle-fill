@@ -132,26 +132,27 @@ void ui_ManualControl_screen_init()
 
     // Temperature displays container
     lv_obj_t *tempContainer = lv_obj_create(ui_ManualControlScreen);
-    lv_obj_set_size(tempContainer, 700, 100);
+    lv_obj_set_size(tempContainer, 700, 140); // Increased height for multi-line text
     lv_obj_align(tempContainer, LV_ALIGN_TOP_MID, 0, 70);
     lv_obj_set_style_bg_color(tempContainer, lv_color_hex(0x2E2E2E), LV_PART_MAIN);
     lv_obj_set_style_radius(tempContainer, 10, LV_PART_MAIN);
-    lv_obj_set_style_pad_all(tempContainer, 10, LV_PART_MAIN);
+    lv_obj_set_style_pad_all(tempContainer, 20, LV_PART_MAIN);
     lv_obj_set_flex_flow(tempContainer, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(tempContainer, LV_FLEX_ALIGN_SPACE_BETWEEN, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER); // Space between items
     lv_obj_set_style_border_width(tempContainer, 2, LV_PART_MAIN);
     lv_obj_set_style_border_color(tempContainer, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
 
     ui_CoreTempLabel = lv_label_create(tempContainer);
-    lv_label_set_text(ui_CoreTempLabel, "Core Temp: -- °C");
-    lv_obj_set_style_text_font(ui_CoreTempLabel, &lv_font_montserrat_28, LV_PART_MAIN);
+    lv_label_set_text(ui_CoreTempLabel, "Core Temp:\n-- C\n-- F");
+    lv_obj_set_style_text_font(ui_CoreTempLabel, &lv_font_montserrat_24, LV_PART_MAIN);
     lv_obj_set_style_text_color(ui_CoreTempLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
-    lv_obj_align(ui_CoreTempLabel, LV_ALIGN_LEFT_MID, 0, 0);
+    lv_obj_set_style_text_align(ui_CoreTempLabel, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN);
 
     ui_ChamberTempLabel = lv_label_create(tempContainer);
-    lv_label_set_text(ui_ChamberTempLabel, "Chamber Temp: -- °C");
-    lv_obj_set_style_text_font(ui_ChamberTempLabel, &lv_font_montserrat_28, LV_PART_MAIN);
+    lv_label_set_text(ui_ChamberTempLabel, "Chamber Temp:\n-- C\n-- F");
+    lv_obj_set_style_text_font(ui_ChamberTempLabel, &lv_font_montserrat_24, LV_PART_MAIN);
     lv_obj_set_style_text_color(ui_ChamberTempLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
-    lv_obj_align(ui_ChamberTempLabel, LV_ALIGN_RIGHT_MID, 0, 0);
+    lv_obj_set_style_text_align(ui_ChamberTempLabel, LV_TEXT_ALIGN_RIGHT, LV_PART_MAIN);
 
     // Buttons container
     lv_obj_t *btnContainer = lv_obj_create(ui_ManualControlScreen);
@@ -193,7 +194,6 @@ void ui_ManualControl_screen_init()
     ui_GlobalLabels::updateUserSelectionLabel(ui_ManualControlScreen);
 }
 
-// Screen destroy
 void ui_ManualControl_screen_destroy()
 {
     if (ui_ManualControlScreen)
@@ -208,19 +208,72 @@ void ui_ManualControl_screen_destroy()
     ui_ChamberTempLabel = nullptr;
 }
 
-// Update temperature labels
+static float celsiusToFahrenheit(float celsius)
+{
+    return celsius * 9.0 / 5.0 + 32.0;
+}
+
 void ui_ManualControl_screen_update(float coreTemp, float chamberTemp)
 {
+    logger.info("[ui_ManualControl_screen_update] Function called");
+    logger.info(String("[ui_ManualControl_screen_update] Core Temp: ") + String(coreTemp, 2) + " °C");
+    logger.info(String("[ui_ManualControl_screen_update] Chamber Temp: ") + String(chamberTemp, 2) + " °C");
+    logger.info(String("[ui_ManualControl_screen_update] Chamber Temp isnan: ") + String(isnan(chamberTemp)));
+
     if (!ui_ManualControlScreen)
+    {
+        logger.error("[ui_ManualControl_screen_update] ui_ManualControlScreen is NULL!");
         return;
+    }
+    logger.info("[ui_ManualControl_screen_update] Screen object is valid");
 
     if (ui_CoreTempLabel)
-        lv_label_set_text_fmt(ui_CoreTempLabel, "Core Temp: %.1f °C", coreTemp);
+    {
+        if (isnan(coreTemp))
+        {
+            logger.info("[ui_ManualControl_screen_update] Core temp is NAN, setting to '--'");
+            lv_label_set_text(ui_CoreTempLabel, "Core Temp:\n-- C\n-- F");
+        }
+        else
+        {
+            float coreTempF = celsiusToFahrenheit(coreTemp);
+            logger.info(String("[ui_ManualControl_screen_update] Setting core temp label to: ") + String(coreTemp, 1) + " C / " + String(coreTempF, 1) + " F");
+            char buf[80];
+            snprintf(buf, sizeof(buf), "Core Temp:\n%.1f C\n%.1f F", coreTemp, coreTempF);
+            logger.info(String("[ui_ManualControl_screen_update] Buffer contents: ") + String(buf));
+            lv_label_set_text(ui_CoreTempLabel, buf);
+        }
+    }
+    else
+    {
+        logger.error("[ui_ManualControl_screen_update] ui_CoreTempLabel is NULL!");
+    }
 
     if (ui_ChamberTempLabel)
-        lv_label_set_text_fmt(ui_ChamberTempLabel, "Chamber Temp: %.1f °C", chamberTemp);
+    {
+        if (isnan(chamberTemp))
+        {
+            logger.info("[ui_ManualControl_screen_update] Chamber temp is NAN, setting to '--'");
+            lv_label_set_text(ui_ChamberTempLabel, "Chamber Temp:\n-- C\n-- F");
+        }
+        else
+        {
+            float chamberTempF = celsiusToFahrenheit(chamberTemp);
+            logger.info(String("[ui_ManualControl_screen_update] Setting chamber temp label to: ") + String(chamberTemp, 1) + " C / " + String(chamberTempF, 1) + " F");
+            char buf[80];
+            snprintf(buf, sizeof(buf), "Chamber Temp:\n%.1f C\n%.1f F", chamberTemp, chamberTempF);
+            logger.info(String("[ui_ManualControl_screen_update] Buffer contents: ") + String(buf));
+            lv_label_set_text(ui_ChamberTempLabel, buf);
+        }
+    }
+    else
+    {
+        logger.error("[ui_ManualControl_screen_update] ui_ChamberTempLabel is NULL!");
+    }
 
-    ui_GlobalButtons::updateGlobalButtons(ui_ManualControlScreen);
-    ui_GlobalLabels::updateNetworkStatus(ui_ManualControlScreen);
-    ui_GlobalLabels::updateUserSelectionLabel(ui_ManualControlScreen);
+    logger.info("[ui_ManualControl_screen_update] Update complete");
+
+    // ui_GlobalButtons::updateGlobalButtons(ui_ManualControlScreen);
+    // ui_GlobalLabels::updateNetworkStatus(ui_ManualControlScreen);
+    // ui_GlobalLabels::updateUserSelectionLabel(ui_ManualControlScreen);
 }

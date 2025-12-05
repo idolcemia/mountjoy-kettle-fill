@@ -33,8 +33,11 @@
 Arduino_H7_Video Display(800, 480, GigaDisplayShield);
 Arduino_GigaDisplayTouch TouchDetector;
 
-
 WiFiClientWrapper testClient;
+
+unsigned long lastTempUpdate = 0;
+const unsigned long TEMP_UPDATE_INTERVAL = 1000;
+
 void _log();
 
 void setup()
@@ -50,7 +53,7 @@ void setup()
     // users = new Users(wifiClient, &logger);
 
     initGlobals();
-    testClient.begin(&logger);
+    // testClient.begin(&logger);
     Display.begin();
     TouchDetector.begin();
     ui_init();
@@ -69,7 +72,28 @@ void loop()
     //     Diagnostic::updateDefault();
     // }
 
-    delay(16);
+    // Update temperature display periodically
+    unsigned long currentMillis = millis();
+    if (currentMillis - lastTempUpdate >= TEMP_UPDATE_INTERVAL)
+    {
+        lastTempUpdate = currentMillis;
+
+        // Read temperatures from sensors
+        float coreTemp = 0.0; // Replace with actual core sensor if you have one
+        float chamberTemp = chamberTemperatureSensor.getTempC();
+
+        // Handle invalid readings
+        if (isnan(chamberTemp))
+        {
+            chamberTemp = -999.0; // Or handle however you prefer
+        }
+
+        logger.info("[MAIN] Chamber temp: " + String(chamberTemp));
+        // Update the UI
+        ui_ManualControl_screen_update(coreTemp, chamberTemp);
+    }
+
+    delay(5); // Small delay for stability
 }
 
 void _log()

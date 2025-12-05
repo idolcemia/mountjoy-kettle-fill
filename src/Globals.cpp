@@ -19,6 +19,7 @@ NetworkManager *network =
 WiFiClientWrapper *wifiClient = nullptr;
 MenuManager menuManager;
 PasteurizerRelays pasteurizerRelays(2, 3, 4, 5); // on the arduino shield, 4, 7, 8, 12
+TemperatureSensor chamberTemperatureSensor(A0);
 
 // Global labels
 GlobalLabels gLabels;
@@ -28,6 +29,9 @@ void initGlobals()
     initMenus();
     initWiFiClient();
     initUsers();
+
+    pasteurizerRelays.begin();
+    chamberTemperatureSensor.begin();
 }
 
 void initMenus()
