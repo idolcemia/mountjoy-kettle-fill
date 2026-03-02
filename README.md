@@ -58,6 +58,7 @@ To force LVGL to use *correct* configuration, the following steps were taken:
    In:  
    ```
    .pio/packages/framework-arduino-mbed/libraries/Arduino_H7_Video/src/
+    or .platformio/packages/framework-arduino-mbed/libraries/Arduino_H7_Video/src/
    ```  
    Change:  
    ```

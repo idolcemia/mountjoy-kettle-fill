@@ -5,7 +5,8 @@ TemperatureSensor::TemperatureSensor(
     float fixedResistor,
     float r0Resistance,
     float t0Celsius,
-    float betaValue)
+    float betaValue,
+    bool resistorOnBottom)
 {
     pin = analogPin;
     rFixed = fixedResistor;
@@ -13,6 +14,7 @@ TemperatureSensor::TemperatureSensor(
     t0 = t0Celsius + 273.15; // Convert to Kelvin
     beta = betaValue;
     adcMax = 1023; // 10-bit ADC on Arduino Giga
+    onBottom = resistorOnBottom;
 }
 
 void TemperatureSensor::begin()
@@ -24,6 +26,7 @@ void TemperatureSensor::begin()
 float TemperatureSensor::readResistance()
 {
     int adc = analogRead(pin);
+    float rTherm;
 
     // Check for invalid ADC readings
     if (adc <= 0 || adc >= adcMax)
@@ -45,20 +48,11 @@ float TemperatureSensor::readResistance()
     //   Formula: R_therm = R_fixed × (ADC_reading / (ADC_max - ADC_reading))
     //   Behavior: Temperature ↑ → Resistance ↓ → Voltage ↑ → ADC ↑
     //
-    // Currently using: CONFIGURATION 2 (Thermistor on top)
-    //
-    // TODO: Add constructor parameter to specify thermistor position
-    //   Example: TemperatureSensor(pin, rFixed, r0, t0, beta, THERMISTOR_TOP)
-    //   or add enum: enum ThermistorPosition { THERMISTOR_BOTTOM, THERMISTOR_TOP };
-    //   This would allow the class to automatically use the correct formula based on
-    //   how the user physically wired their circuit, making the library more flexible
-    //   and preventing calculation errors from mismatched wiring configurations.
 
-    // Circuit: Vcc - Rfixed - A0 - Thermistor - GND (CONFIGURATION 1)
-    // float rTherm = rFixed * ((float)adcMax / (float)adc - 1.0);
+    // Apply the correct formula based on thermistor position
 
-    // Circuit: Vcc - Thermistor - A0 - Rfixed - GND (CONFIGURATION 2)
-    float rTherm = rFixed * ((float)adc / ((float)adcMax - (float)adc));
+    rTherm = (onBottom) ? rFixed * ((float)adcMax / (float)adc - 1.0)
+                        : rFixed * ((float)adc / ((float)adcMax - (float)adc));
 
     return rTherm;
 }

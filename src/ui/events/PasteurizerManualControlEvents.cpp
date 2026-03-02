@@ -5,10 +5,75 @@
 #include "ui/screens/labels/ui_GlobalLabels.h"
 #include "ui/screens/ui_GlobalButtons.h"
 
+
 // Helper function to log button state change
 static void logButtonState(const char *name, bool state)
 {
     logger.info("[PasteurizerManualControlEvents] " + String(name) + " button " + (state ? "enabled" : "disabled"));
+}
+
+
+
+
+
+void dropdownUserChanged(lv_event_t * e)
+{
+	// If user set, enable checkpoint switch
+
+	if (lv_dropdown_get_selected(ui_dropdownUser) > 0) // If a user is selected (index 0 is "Select User")
+	{
+		lv_obj_remove_state(ui_switchCheckPoint, LV_STATE_DISABLED);	// Make checkpoint switch enabled
+	}
+
+
+}
+
+void switchHeatChanged(lv_event_t * e)
+{
+
+    if (lv_obj_has_state(ui_switchHeat, LV_STATE_CHECKED))
+    {
+        // Heat switch is ON
+      heatControl.start();
+
+
+}
+    else
+    {
+        // Heat switch is OFF
+        heatControl.reset();
+  
+    }
+}
+
+void switchFillChanged(lv_event_t * e)
+{
+	   if (lv_obj_has_state(ui_switchFill, LV_STATE_CHECKED))
+    {
+
+      flowMeter.start();
+
+
+}
+    else
+    {
+
+      flowMeter.reset();
+
+    }
+}
+
+// Heat Button Events
+void ui_event_buttonHeatEnabled(lv_event_t *e)
+{
+    logButtonState("Heat", true);
+    pasteurizerRelays.activateOperationRelay();
+}
+
+void ui_event_buttonHeatDisabled(lv_event_t *e)
+{
+    logButtonState("Heat", false);
+    pasteurizerRelays.deactivateOperationRelay();
 }
 
 // Operation Button Events

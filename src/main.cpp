@@ -16,6 +16,7 @@
 #include "Arduino_H7_Video.h"
 #include "Arduino_GigaDisplayTouch.h"
 #include "ui/ui.h"
+#include "GigaAudio.h"
 
 // --- Internal libs ---
 // #include <NetworkManager.h>
@@ -25,10 +26,13 @@
 #include <HttpResponse.h>
 #include <Users.h>
 #include <Diagnostic.h>
-
 #include "config.h"
 #include "Globals.h"
 #include "ui/screens/labels/ui_GlobalLabels.h"
+#include "ui/screens/ui_ManualControlScreen.h"
+// #include "ui/screens/ui_WiFiConnect.h"
+
+// #include ".pio/libdeps/esp32/lvgl/src/font"
 
 Arduino_H7_Video Display(800, 480, GigaDisplayShield);
 Arduino_GigaDisplayTouch TouchDetector;
@@ -38,6 +42,8 @@ WiFiClientWrapper testClient;
 unsigned long lastTempUpdate = 0;
 const unsigned long TEMP_UPDATE_INTERVAL = 1000;
 
+
+
 void _log();
 
 void setup()
@@ -46,6 +52,11 @@ void setup()
     logger.info("Starting log....");
 
     network->setRemote(server, port);
+
+    heatControl.begin();
+
+    flowMeter.begin();
+
     // network->begin();
     // network->printStatus();
 
@@ -81,16 +92,88 @@ void loop()
         // Read temperatures from sensors
         float coreTemp = 0.0; // Replace with actual core sensor if you have one
         float chamberTemp = chamberTemperatureSensor.getTempC();
+        float kettleTemp = kettleTemperatureSensor.getTempC();
 
         // Handle invalid readings
         if (isnan(chamberTemp))
         {
-            chamberTemp = -999.0; // Or handle however you prefer
+            chamberTemp = -273.0; // Or handle however you prefer
         }
 
-        logger.info("[MAIN] Chamber temp: " + String(chamberTemp));
-        // Update the UI
-        ui_ManualControl_screen_update(coreTemp, chamberTemp);
+                if (isnan(kettleTemp))
+        {
+            kettleTemp = -273.0; // Or handle however you prefer
+        }
+
+    
+
+       logger.info("[MAIN] Chamber temp: " + String(chamberTemp));
+       logger.info("[MAIN] Kettle temp: " + String(kettleTemp));
+
+      //  logger.info("#devices: ");
+        logger.info("FlowMeter.state: " + String(flowMeter._state));
+     logger.info("HeatControl.state: " + String(heatControl._state));
+    
+        switch (heatControl._state)
+        {
+        default:
+        case HeatControlState::HC_RESET:
+            flowMeter.start();
+            break;
+        case HeatControlState::HC_RUN:
+            heatControl.getTempC(); // Update temp reading.
+            break;
+        case HeatControlState::HC_PAUSE:
+            heatControl.stop();
+            break;
+        case HeatControlState::HC_DONE:
+            heatControl.reset();
+            break;
+        }
+
+        heatControl.updateUI(); // Update heat control UI elements based on current temp and state
+
+        switch (flowMeter._state)
+        {
+        default:
+
+        case FlowMeterState::FLOW_RESET:
+
+            flowMeter.start();
+            break;
+
+        case FlowMeterState::FLOW_RUN:
+
+          //  noInterrupts();
+            logger.info("FlowMeter.pulses: " + String(flowMeter._pulses));  
+           // interrupts();
+            
+       //   lv_slider_set_value(ui_sliderFill, int( flowMeter._fillTimeMillis/(millis() -flowMeter._startTimeMillis)) * 100, LV_ANIM_OFF);
+        
+        if(millis() > flowMeter._startTimeMillis + flowMeter._fillTimeMillis || flowMeter._pulses >= flowMeter._maxPulse) {
+                 // if(millis() > flowMeter._startTimeMillis + flowMeter._fillTimeMillis ) { // Timed fill
+                 // if(flowMeter._pulses >= flowMeter._maxPulse) { // Pulse count fill
+                    
+                    flowMeter.stop();
+
+                    flowMeter.reset();
+            }
+            break;
+
+        case FlowMeterState::FLOW_PAUSE:
+            flowMeter.stop();
+            break;
+
+        case FlowMeterState::FLOW_DONE:
+
+            break;
+        }
+
+
+            flowMeter.updateUI();
+ 
+
+        //  ui_ManualControl_screen_update(coreTemp, chamberTemp);
     }
 
     delay(5); // Small delay for stability

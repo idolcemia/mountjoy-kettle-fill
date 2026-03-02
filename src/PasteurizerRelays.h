@@ -1,8 +1,10 @@
 #pragma once
 #include <Arduino.h>
 
-class PasteurizerRelays
-{
+
+
+class PasteurizerRelays {
+
 public:
     // Constructor: pass the 4 relay pins
     PasteurizerRelays(int opPin, int heatPin, int chillPin, int pumpPin);

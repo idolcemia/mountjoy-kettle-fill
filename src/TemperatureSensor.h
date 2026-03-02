@@ -34,8 +34,9 @@ private:
     float t0;     // Reference temperature in Kelvin
     float beta;   // Beta coefficient (β) - thermistor material constant
     int adcMax;   // Maximum ADC value (1023 for 10-bit Arduino ADC)
+    bool onBottom; // True if thermistor is on the bottom of the voltage divider (between analog pin and GND)
 
-    /**
+    /** 
      * Calculate the thermistor's current resistance from ADC reading
      * Uses voltage divider equation: R_thermistor = R_fixed × (ADC_max / ADC_reading - 1)
      */
@@ -78,10 +79,11 @@ public:
      */
     TemperatureSensor(
         int analogPin,
-        float fixedResistor = 12000.0, // 12kΩ - YOUR measured fixed resistor
-        float r0Resistance = 12600.0,  // 12.6kΩ - YOUR measured thermistor at 25°C
+        float fixedResistor = 9300.0,// 12000.0, // 12kΩ - YOUR measured fixed resistor
+        float r0Resistance =  7800.0,// 12600.0,  // 12.6kΩ - YOUR measured thermistor at 25°C
         float t0Celsius = 25.0,        // 25°C - standard reference temperature
-        float betaValue = 3950.0);     // 3950K - estimated beta (verify with datasheet)
+        float betaValue = 3950.0,
+        bool resistorOnBottom = false);     // 3950K - estimated beta (verify with datasheet)
 
     /**
      * Initialize the sensor
