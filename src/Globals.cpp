@@ -25,7 +25,7 @@ MenuManager menuManager;
 PasteurizerRelays pasteurizerRelays(4, 5, 6, 7); // on the arduino shield, 4, 7, 8, 12
 TemperatureSensor chamberTemperatureSensor(A0);
 TemperatureSensor kettleTemperatureSensor(A1); // Resistor on bottom for better accuracy at higher temps
-FlowMeter flowMeter(2, 3, 6); // Sensor pin 2, relay pin 3, fill volume 40 liters (adjust as needed)
+FlowMeter flowMeter(2, 3, 44); // Sensor pin 2, relay pin 3, fill volume 40 liters (adjust as needed)
 HeatControl heatControl(A1, 9, 82.5);
 
 // GigaAudio audio("AUDIO");  If there is no USB drive installed,

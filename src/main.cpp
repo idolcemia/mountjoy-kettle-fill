@@ -68,6 +68,7 @@ void setup()
     Display.begin();
     TouchDetector.begin();
     ui_init();
+
 }
 
 void loop()
@@ -150,9 +151,9 @@ void loop()
             
        //   lv_slider_set_value(ui_sliderFill, int( flowMeter._fillTimeMillis/(millis() -flowMeter._startTimeMillis)) * 100, LV_ANIM_OFF);
         
-        if(millis() > flowMeter._startTimeMillis + flowMeter._fillTimeMillis || flowMeter._pulses >= flowMeter._maxPulse) {
+        //if(millis() > flowMeter._startTimeMillis + flowMeter._fillTimeMillis || flowMeter._pulses >= flowMeter._maxPulse) {
                  // if(millis() > flowMeter._startTimeMillis + flowMeter._fillTimeMillis ) { // Timed fill
-                 // if(flowMeter._pulses >= flowMeter._maxPulse) { // Pulse count fill
+                  if(flowMeter._pulses >= flowMeter._maxPulse) { // Pulse count fill
                     
                     flowMeter.stop();
 
