@@ -2,6 +2,8 @@
 #define TEMPERATURE_SENSOR_H
 
 #include <Arduino.h>
+#include <DallasTemperature.h>
+
 
 /**
  * Reads temperature from an NTC thermistor using the Beta (β) parameter equation.

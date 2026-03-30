@@ -6,9 +6,7 @@ const char *password = "bebubbly";
 const char *server = "3.136.200.179"; // Replace with actual server IP
 const int port = 8000;
 
-// Dallas temperature sensor pin assignment.
-#define ONE_WIRE_BUS 12
-#define SENSOR_NOT_FOUND -127
+
 
 // Global objects
 RumpshiftLogger logger(BAUD_RATE, DEBUG_LEVEL, true);
@@ -23,13 +21,10 @@ NetworkManager *network =
 WiFiClientWrapper *wifiClient = nullptr;
 MenuManager menuManager;
 PasteurizerRelays pasteurizerRelays(4, 5, 6, 7); // on the arduino shield, 4, 7, 8, 12
-TemperatureSensor chamberTemperatureSensor(A0);
-TemperatureSensor kettleTemperatureSensor(A1); // Resistor on bottom for better accuracy at higher temps
 FlowMeter flowMeter(2, 3, 44); // Sensor pin 2, relay pin 3, fill volume 40 liters (adjust as needed)
-HeatControl heatControl(A1, 9, 82.5);
+HeatControl heatControl(8, 9, 80.0); // Sensor pin 8, relay pin 9, set point 80C (adjust as needed)
 
-// GigaAudio audio("AUDIO");  If there is no USB drive installed,
-//  creating an instance of GigaAudio seems to hang the system.
+
 
 // Global labels
 GlobalLabels gLabels;
@@ -40,8 +35,6 @@ void initGlobals()
     initWiFiClient();
     initUsers();
 
-    pasteurizerRelays.begin();
-    chamberTemperatureSensor.begin();
     flowMeter.begin();
     heatControl.begin();
 }

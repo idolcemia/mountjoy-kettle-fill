@@ -2,9 +2,9 @@
 #define HEAT_CONTROL_H
 
 #include <Arduino.h>
-//#include <OneWire.h>
-//#include <DallasTemperature.h>
-#include "TemperatureSensor.h"
+#include "TemperatureSensorDallas.h"
+
+
 
 enum HeatControlState
 {
@@ -30,7 +30,9 @@ private:
     float _temp;
     float _startingTemp;
     const float _tempAllowedDeviation = 1.0; // Maximum deviation from baseline allowed.
-    TemperatureSensor tempSensor;
+    TemperatureSensorDallas tempSensor; // Dallas temperature sensor instance
+
+
 public:
     /**
      * Constructor

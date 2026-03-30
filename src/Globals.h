@@ -14,6 +14,7 @@
 #include <DallasTemperature.h>
 #include "FlowMeter.h"
 #include "HeatControl.h"
+#include "TemperatureSensorDallas.h"
 
 // -- Menus --
 #include <MenuManager.h>
@@ -37,9 +38,6 @@ extern NetworkManager *network;
 extern WiFiClientWrapper *wifiClient;
 extern MenuManager menuManager;
 extern PasteurizerRelays pasteurizerRelays;
-extern TemperatureSensor chamberTemperatureSensor;
-extern TemperatureSensor kettleTemperatureSensor;
-extern GigaAudio audio;
 extern FlowMeter flowMeter;
 extern HeatControl heatControl;
 

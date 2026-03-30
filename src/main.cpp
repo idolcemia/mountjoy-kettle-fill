@@ -91,27 +91,11 @@ void loop()
         lastTempUpdate = currentMillis;
 
         // Read temperatures from sensors
-        float coreTemp = 0.0; // Replace with actual core sensor if you have one
-        float chamberTemp = chamberTemperatureSensor.getTempC();
-        float kettleTemp = kettleTemperatureSensor.getTempC();
+        
 
-        // Handle invalid readings
-        if (isnan(chamberTemp))
-        {
-            chamberTemp = -273.0; // Or handle however you prefer
-        }
+      logger.info("Temperature: " + String(heatControl.getTempC()));
 
-                if (isnan(kettleTemp))
-        {
-            kettleTemp = -273.0; // Or handle however you prefer
-        }
-
-    
-
-       logger.info("[MAIN] Chamber temp: " + String(chamberTemp));
-       logger.info("[MAIN] Kettle temp: " + String(kettleTemp));
-
-      //  logger.info("#devices: ");
+     //  logger.info("#devices: ");
         logger.info("FlowMeter.state: " + String(flowMeter._state));
      logger.info("HeatControl.state: " + String(heatControl._state));
     
@@ -172,6 +156,7 @@ void loop()
 
 
             flowMeter.updateUI();
+         
  
 
         //  ui_ManualControl_screen_update(coreTemp, chamberTemp);
