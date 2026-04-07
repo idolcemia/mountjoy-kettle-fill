@@ -21,6 +21,10 @@ void TemperatureSensorDallas::begin()
         deviceCount = 0;
         memset(deviceAddress, 0, sizeof(deviceAddress));
     }
+    for (int i = 0; i < READING_AVG_WINDOW; ++i)
+    {
+        _recentReading[i] = 0.0f;
+    }
 }
 
 float TemperatureSensorDallas::getTempC()
@@ -32,9 +36,21 @@ float TemperatureSensorDallas::getTempC()
 
     sensors.requestTemperatures();
     float tCelsius = sensors.getTempC(deviceAddress);
+
     if (tCelsius == DEVICE_DISCONNECTED_C)
     {
         return NAN;
     }
-    return tCelsius;
+
+    // Update the circular buffer for smoothing
+    _recentReadingSum -= _recentReading[_recentReadingIndex];
+    _recentReading[_recentReadingIndex] = tCelsius;
+    _recentReadingSum += tCelsius;
+    _recentReadingIndex = (_recentReadingIndex + 1) % READING_AVG_WINDOW;
+    if (_recentReadingCount < READING_AVG_WINDOW)
+    {
+        _recentReadingCount++;
+    }
+
+    return _recentReadingSum / _recentReadingCount;
 }

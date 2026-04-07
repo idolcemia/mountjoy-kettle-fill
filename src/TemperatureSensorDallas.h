@@ -15,12 +15,16 @@
 class TemperatureSensorDallas
 {
 private:
+    static const int READING_AVG_WINDOW = 10; // Number of recent readings to average for smoothing
     int pin; 
     int deviceCount;
+    float _recentReading[READING_AVG_WINDOW] = {0.0f}; // Circular buffer to hold recent volume readings for smoothing
+    int _recentReadingIndex = 0;
+    int _recentReadingCount = 0;
+    float _recentReadingSum = 0.0f;
     DeviceAddress deviceAddress;     
     OneWire oneWire;
     DallasTemperature sensors;
-
 
 public:
     /**
