@@ -4,7 +4,6 @@ TemperatureSensorDallas::TemperatureSensorDallas(int sensorPin)
     : pin(sensorPin), oneWire(sensorPin), sensors(&oneWire)
 {
     deviceCount = 0;
-    memset(deviceAddress, 0, sizeof(deviceAddress));
 }
 
 void TemperatureSensorDallas::begin()
