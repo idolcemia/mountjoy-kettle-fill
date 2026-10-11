@@ -1,3 +1,5 @@
+#include "ui/screens/ui_DebugLogScreen.h"
+#include "ui/screens/ui_WiFiConnect.h"
 #include "lvgl.h"
 #include "Globals.h"
 #include "ui/ui.h"

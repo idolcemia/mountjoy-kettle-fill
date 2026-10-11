@@ -1,12 +1,15 @@
 #include "Globals.h"
+#include "ui/screens/ui_MenuSelectionScreen.h"
+#include "ui/screens/ui_WiFiConnect.h"
+#include "ui/screens/ui_DebugLogScreen.h"
+#include "ui/screens/ui_UserSelectionScreen.h"
+#include "ui/screens/ui_TempControl.h"
 
 // Network credentials
 const char *ssid = "mtjyspkl";
 const char *password = "bebubbly";
 const char *server = "3.136.200.179"; // Replace with actual server IP
 const int port = 8000;
-
-
 
 // Global objects
 RumpshiftLogger logger(BAUD_RATE, DEBUG_LEVEL, true);
@@ -21,10 +24,8 @@ NetworkManager *network =
 WiFiClientWrapper *wifiClient = nullptr;
 MenuManager menuManager;
 PasteurizerRelays pasteurizerRelays(4, 5, 6, 7); // on the arduino shield, 4, 7, 8, 12
-FlowMeter flowMeter(2, 3, 44); // Sensor pin 2, relay pin 3, fill volume 40 liters (adjust as needed)
-HeatControl heatControl(8, 9, 80.0); // Sensor pin 8, relay pin 9, set point 80C (adjust as needed)
-
-
+FlowMeter flowMeter(2, 3, 44);                   // Sensor pin 2, relay pin 3, fill volume 40 liters (adjust as needed)
+HeatControl heatControl(8, 9, 80.0);             // Sensor pin 8, relay pin 9, set point 80C (adjust as needed)
 
 // Global labels
 GlobalLabels gLabels;

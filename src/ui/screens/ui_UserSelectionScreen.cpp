@@ -1,3 +1,4 @@
+#include "ui/screens/ui_UserSelectionScreen.h"
 #include "ui/ui.h"
 #include "Globals.h"
 #include "ui/events/events.h"

@@ -9,20 +9,19 @@ HeatControl::HeatControl(
     int sensorPin,
     int relayPin,
     float tempSetPoint)
-    : _sensorPin(sensorPin), _relayPin(relayPin), _tempSetPoint(tempSetPoint), tempSensor(sensorPin) // Initialize Dallas temperature sensor with the same pin
+    : _sensorPin(sensorPin), _relayPin(relayPin), _tempSetPoint(tempSetPoint)
 {
 }
 
 void HeatControl::begin()
 {
-    pinMode(_sensorPin, INPUT);
+    //   pinMode(_sensorPin, INPUT);
     pinMode(_relayPin, OUTPUT);
     digitalWrite(_relayPin, LOW); // Ensure heater is off
     _state = HeatControlState::HC_DONE;
     _temp = NAN;
     _startingTemp = NAN;
     tempSensor.begin();
-  
 }
 
 void HeatControl::start()
@@ -47,20 +46,21 @@ float HeatControl::getTempC()
 {
     _temp = tempSensor.getTempC();
 
-    // If set point reached or exceeded, transition to DONE state  
-    if (_temp  >= _tempSetPoint) {
-            reset();
+    // If set point reached or exceeded, transition to DONE state
+    if (_temp >= _tempSetPoint)
+    {
+        reset();
     }
     return _temp;
 }
 
 float HeatControl::updateUI()
 {
-    // If temperature readings are invalid or we don't have a valid starting point, 
+    // If temperature readings are invalid or we don't have a valid starting point,
     // show placeholder and skip updates to avoid erratic behavior.
     if (isnan(_temp) || isnan(_startingTemp) || _tempSetPoint == _startingTemp)
     {
- 
+
         lv_label_set_text(ui_labelTempValue, "--.-");
         return _temp;
     }
@@ -69,6 +69,6 @@ float HeatControl::updateUI()
     lv_slider_set_value(ui_sliderHeat, int(tempPercent), LV_ANIM_OFF);
     lv_arc_set_value(ui_arcHeat, int(_temp));
     lv_label_set_text(ui_labelTempValue, String(_temp, 1).c_str());
-    
+
     return _temp;
 }

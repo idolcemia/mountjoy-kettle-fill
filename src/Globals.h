@@ -18,11 +18,6 @@
 
 // -- Menus --
 #include <MenuManager.h>
-#include "ui/screens/ui_WiFiConnect.h"
-#include "ui/screens/ui_DebugLogScreen.h"
-#include "ui/screens/ui_UserSelectionScreen.h"
-#include "ui/screens/ui_MenuSelectionScreen.h"
-#include "ui/screens/ui_TempControl.h"
 
 // Network credentials
 extern const char *ssid;

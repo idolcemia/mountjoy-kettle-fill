@@ -1,6 +1,8 @@
 #ifndef UI_USERSELECTION_H
 #define UI_USERSELECTION_H
 
+#include "lvgl.h"
+
 #ifdef __cplusplus
 extern "C"
 {

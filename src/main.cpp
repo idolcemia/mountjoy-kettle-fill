@@ -40,9 +40,7 @@ Arduino_GigaDisplayTouch TouchDetector;
 WiFiClientWrapper testClient;
 
 unsigned long lastTempUpdate = 0;
-const unsigned long TEMP_UPDATE_INTERVAL = 1000;
-
-
+const unsigned long TEMP_UPDATE_INTERVAL = 200;
 
 void _log();
 
@@ -68,7 +66,6 @@ void setup()
     Display.begin();
     TouchDetector.begin();
     ui_init();
-
 }
 
 void loop()
@@ -91,14 +88,13 @@ void loop()
         lastTempUpdate = currentMillis;
 
         // Read temperatures from sensors
-        
 
-      logger.info("Temperature: " + String(heatControl.getTempC()));
+        logger.info("Temperature: " + String(heatControl.getTempC()));
 
-     //  logger.info("#devices: ");
+        //  logger.info("#devices: ");
         logger.info("FlowMeter.state: " + String(flowMeter._state));
-     logger.info("HeatControl.state: " + String(heatControl._state));
-    
+        logger.info("HeatControl.state: " + String(heatControl._state));
+
         switch (heatControl._state)
         {
         default:
@@ -129,19 +125,20 @@ void loop()
 
         case FlowMeterState::FLOW_RUN:
 
-          //  noInterrupts();
-            logger.info("FlowMeter.pulses: " + String(flowMeter._pulses));  
-           // interrupts();
-            
-       //   lv_slider_set_value(ui_sliderFill, int( flowMeter._fillTimeMillis/(millis() -flowMeter._startTimeMillis)) * 100, LV_ANIM_OFF);
-        
-        //if(millis() > flowMeter._startTimeMillis + flowMeter._fillTimeMillis || flowMeter._pulses >= flowMeter._maxPulse) {
-                 // if(millis() > flowMeter._startTimeMillis + flowMeter._fillTimeMillis ) { // Timed fill
-                  if(flowMeter._pulses >= flowMeter._maxPulse) { // Pulse count fill
-                    
-                    flowMeter.stop();
+            //  noInterrupts();
+            logger.info("FlowMeter.pulses: " + String(flowMeter._pulses));
+            // interrupts();
 
-                    flowMeter.reset();
+            //   lv_slider_set_value(ui_sliderFill, int( flowMeter._fillTimeMillis/(millis() -flowMeter._startTimeMillis)) * 100, LV_ANIM_OFF);
+
+            // if(millis() > flowMeter._startTimeMillis + flowMeter._fillTimeMillis || flowMeter._pulses >= flowMeter._maxPulse) {
+            //  if(millis() > flowMeter._startTimeMillis + flowMeter._fillTimeMillis ) { // Timed fill
+            if (flowMeter._pulses >= flowMeter._maxPulse)
+            { // Pulse count fill
+
+                flowMeter.stop();
+
+                flowMeter.reset();
             }
             break;
 
@@ -154,10 +151,7 @@ void loop()
             break;
         }
 
-
-            flowMeter.updateUI();
-         
- 
+        flowMeter.updateUI();
 
         //  ui_ManualControl_screen_update(coreTemp, chamberTemp);
     }

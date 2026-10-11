@@ -4,6 +4,8 @@
 #include "Globals.h"
 #include "ui/screens/ui_DebugLogScreen.h"
 #include "ui/screens/ui_MenuSelectionScreen.h"
+#include "ui/screens/ui_UserSelectionScreen.h"
+#include "ui/screens/ui_WiFiConnect.h"
 #include "ui/screens/labels/ui_GlobalLabels.h"
 #include "ui/screens/ui_GlobalButtons.h"
 

@@ -4,7 +4,6 @@
 #include <Arduino.h>
 #include <DallasTemperature.h>
 
-
 /**
  * Reads temperature from an NTC thermistor using the Beta (β) parameter equation.
  *
@@ -30,15 +29,15 @@
 class TemperatureSensor
 {
 private:
-    int pin;      // Arduino analog pin (A0, A1, etc.)
-    float rFixed; // Fixed resistor value in ohms
-    float r0;     // Thermistor resistance at reference temperature (usually 25°C)
-    float t0;     // Reference temperature in Kelvin
-    float beta;   // Beta coefficient (β) - thermistor material constant
-    int adcMax;   // Maximum ADC value (1023 for 10-bit Arduino ADC)
+    int pin;       // Arduino analog pin (A0, A1, etc.)
+    float rFixed;  // Fixed resistor value in ohms
+    float r0;      // Thermistor resistance at reference temperature (usually 25°C)
+    float t0;      // Reference temperature in Kelvin
+    float beta;    // Beta coefficient (β) - thermistor material constant
+    int adcMax;    // Maximum ADC value (1023 for 10-bit Arduino ADC)
     bool onBottom; // True if thermistor is on the bottom of the voltage divider (between analog pin and GND)
 
-    /** 
+    /**
      * Calculate the thermistor's current resistance from ADC reading
      * Uses voltage divider equation: R_thermistor = R_fixed × (ADC_max / ADC_reading - 1)
      */
@@ -81,11 +80,11 @@ public:
      */
     TemperatureSensor(
         int analogPin,
-        float fixedResistor = 9300.0,// 12000.0, // 12kΩ - YOUR measured fixed resistor
-        float r0Resistance =  7800.0,// 12600.0,  // 12.6kΩ - YOUR measured thermistor at 25°C
-        float t0Celsius = 25.0,        // 25°C - standard reference temperature
+        float fixedResistor = 9300.0, // 12000.0, // 12kΩ - YOUR measured fixed resistor
+        float r0Resistance = 7800.0,  // 12600.0,  // 12.6kΩ - YOUR measured thermistor at 25°C
+        float t0Celsius = 25.0,       // 25°C - standard reference temperature
         float betaValue = 3950.0,
-        bool resistorOnBottom = false);     // 3950K - estimated beta (verify with datasheet)
+        bool resistorOnBottom = false); // 3950K - estimated beta (verify with datasheet)
 
     /**
      * Initialize the sensor
@@ -175,33 +174,33 @@ public:
  * - Need better accuracy: Use 4-wire measurement or consider an RTD like PT1000
  */
 
-// /** Reads temperature from an NTC (Negative Temperature Coefficient) thermistor 
+// /** Reads temperature from an NTC (Negative Temperature Coefficient) thermistor
 //  * using the Beta (β) parameter equation.
-//  * 
+//  *
 //  * WHAT IS AN NTC THERMISTOR?
 //  * An NTC thermistor is a temperature-sensitive resistor whose resistance DECREASES
 //  * as temperature INCREASES. This is the opposite of most materials, and makes NTC
 //  * thermistors ideal for temperature sensing applications.
-//  * 
+//  *
 //  * Key characteristics:
 //  * - Resistance drops predictably as temperature rises
 //  * - "Negative" = resistance goes down when temp goes up
 //  * - Most common type of thermistor for temperature measurement (90%+ of market)
 //  * - Used in: HVAC systems, appliances, 3D printers, automotive, medical devices
-//  * 
+//  *
 //  * HOW TO VERIFY YOU HAVE AN NTC THERMISTOR:
 //  * 1. Measure resistance at room temperature with a multimeter
 //  * 2. Gently pinch the thermistor between your fingers for 30-60 seconds to warm it
 //  * 3. Measure resistance again while holding it
 //  * 4. If resistance DECREASED, it's NTC (correct for this class)
 //  *    If resistance INCREASED, it's PTC (this class won't work - PTC is rare in temp sensing)
-//  * 
+//  *
 //  * Example: 12.6kΩ at 25°C → 10kΩ at 30°C (typical NTC behavior)
-//  * 
+//  *
 //  * CIRCUIT CONFIGURATION:
 //  * The thermistor is configured in a voltage divider:
 //  *   Vcc (5V) --- [Fixed Resistor] --- [Analog Pin] --- [Thermistor] --- GND
-//  * 
-//  * As the thermistor heats up and its resistance drops, more voltage appears 
+//  *
+//  * As the thermistor heats up and its resistance drops, more voltage appears
 //  * across the fixed resistor, and the Arduino reads a higher ADC value.
 //  * /

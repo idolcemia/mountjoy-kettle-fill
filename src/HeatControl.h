@@ -2,9 +2,7 @@
 #define HEAT_CONTROL_H
 
 #include <Arduino.h>
-#include "TemperatureSensorDallas.h"
-
-
+#include "TemperatureSensorIR.h"
 
 enum HeatControlState
 {
@@ -30,8 +28,7 @@ private:
     float _temp;
     float _startingTemp;
     const float _tempAllowedDeviation = 1.0; // Maximum deviation from baseline allowed.
-    TemperatureSensorDallas tempSensor; // Dallas temperature sensor instance
-
+    TemperatureSensorIR tempSensor;          // IR temperature sensor instance
 
 public:
     /**
@@ -39,8 +36,8 @@ public:
      *
      */
 
-   // OneWire oneWire;
-   // DallasTemperature dallasTemperature;
+    // OneWire oneWire;
+    // DallasTemperature dallasTemperature;
 
     HeatControlState _state;
     void begin();
@@ -48,7 +45,7 @@ public:
     HeatControl(
         int sensorPin,
         int relayPin,
-        float tempSetPoint = 82.2);
+        float tempSetPoint = 80);
 
     /**
      * Start heating
@@ -65,14 +62,14 @@ public:
      */
     void reset();
 
-        /**
-         * Take temperature reading and update state
-         */
+    /**
+     * Take temperature reading and update state
+     */
     float getTempC();
 
-        /**
-         * Update display elements based on current temperature and state. Returns current temperature for convenience.
-         */
+    /**
+     * Update display elements based on current temperature and state. Returns current temperature for convenience.
+     */
     float updateUI();
 };
 
