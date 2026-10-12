@@ -26,9 +26,8 @@ private:
     int _relayPin;
     float _tempSetPoint;
     float _temp;
-    float _startingTemp;
     const float _tempAllowedDeviation = 1.0; // Maximum deviation from baseline allowed.
-    TemperatureSensorDallas tempSensor;      // Dallas temperature sensor instance
+    TemperatureSensorIR tempSensorIR;        // IR temperature sensor instance
 
 public:
     /**

@@ -6,7 +6,7 @@ TemperatureSensorIR::TemperatureSensorIR()
 
 void TemperatureSensorIR::begin()
 {
-    Wire.setClock(10000);
+
     sensor.begin();
 
     for (int i = 0; i < READING_AVG_WINDOW; ++i)
@@ -18,7 +18,8 @@ void TemperatureSensorIR::begin()
 float TemperatureSensorIR::getTempC()
 {
 
-    float tCelsius = sensor.getObjectTempCelsius();
+    float tCelsius = sensor.getObjectTempCelsius() ;
+
 
     // Update the circular buffer for smoothing
     _recentReadingSum -= _recentReading[_recentReadingIndex];
