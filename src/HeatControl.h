@@ -28,7 +28,7 @@ private:
     float _temp;
     float _startingTemp;
     const float _tempAllowedDeviation = 1.0; // Maximum deviation from baseline allowed.
-    TemperatureSensorIR tempSensor;          // IR temperature sensor instance
+    TemperatureSensorDallas tempSensor;      // Dallas temperature sensor instance
 
 public:
     /**
